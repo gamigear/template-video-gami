@@ -10,26 +10,43 @@ Có hai loại:
 
 ## Gallery
 
-| | Template | Loại | Khung · độ dài | Nội dung |
-|---|---|---|---|---|
-| <img src="gallery/spotlight_916_cover.jpg" width="160"> | **[Spotlight Reveal](spotlight_916/)** | HyperFrames | 9:16 · 11,5 s | Đèn rọi tự lắp ráp, quét chùm sáng làm lộ 4 dịch vụ rồi logo và handle. Chữ mono kiểu công nghệ, chỉ dùng SFX |
-| <img src="gallery/travel_cinematic.jpg" width="160"> | **[Travel Cinematic](travel_cinematic/)** | CapCut | 16:9 · 22,5 s · 14 clip | Mở bằng dải dọc theo phách, chữ LOCATION đỏ, thẻ tiêu đề "Moments", montage theo beat 120 BPM, tông teal–cam |
-| <img src="gallery/welcome_travel.jpg" width="160"> | **[Welcome Travel Moment](welcome_travel/)** | CapCut | 16:9 · 25,5 s · 52 clip | WELCOME đổi font từng nhịp, letterbox mở dần, tiêu đề Didone, khung lồng bật nấc, cuộn dọc, cắt theo phách 133 BPM |
+![Gallery: các template chạy cùng lúc](gallery/gallery.gif)
 
-### Spotlight Reveal (9:16)
+<table>
+<tr>
+<td align="center" valign="top" width="22%"><a href="spotlight_916/"><img src="gallery/spotlight_916.gif" width="180" alt="Spotlight Reveal"></a><br>🔴 <b>Spotlight Reveal</b><br><sub>HyperFrames · 9:16 · 11,5 s</sub></td>
+<td align="center" valign="top" width="39%"><a href="travel_cinematic/"><img src="gallery/travel_cinematic.gif" width="320" alt="Travel Cinematic"></a><br>🟢 <b>Travel Cinematic</b><br><sub>CapCut · 16:9 · 22,5 s · 14 clip</sub></td>
+<td align="center" valign="top" width="39%"><a href="welcome_travel/"><img src="gallery/welcome_travel.gif" width="320" alt="Welcome Travel Moment"></a><br>🟡 <b>Welcome Travel Moment</b><br><sub>CapCut · 16:9 · 25,5 s · 52 clip</sub></td>
+</tr>
+</table>
+
+| Template | Loại | Khung · độ dài | Cách hoạt động |
+|---|---|---|---|
+| 🔴 **[Spotlight Reveal](spotlight_916/)** | HyperFrames | 9:16 · 11,5 s | Đèn rọi tự lắp ráp, quét chùm sáng làm lộ 4 dịch vụ rồi logo và handle. Chữ mono kiểu công nghệ, chỉ dùng SFX |
+| 🟢 **[Travel Cinematic](travel_cinematic/)** | CapCut | 16:9 · 22,5 s · 14 clip | Mở bằng dải dọc theo phách, chữ LOCATION đỏ, thẻ tiêu đề "Moments", montage theo beat 120 BPM, tông teal–cam |
+| 🟡 **[Welcome Travel Moment](welcome_travel/)** | CapCut | 16:9 · 25,5 s · 52 clip | WELCOME đổi font từng nhịp, letterbox mở dần, tiêu đề Didone, khung lồng bật nấc, cuộn dọc, cắt theo phách 133 BPM |
+
+<details>
+<summary>Dải khung hình chính (ảnh tĩnh)</summary>
+
+**Spotlight Reveal**
 
 ![Spotlight Reveal](gallery/spotlight_916.jpg)
 
-### Travel Cinematic (16:9)
+**Travel Cinematic**
 
 ![Travel Cinematic](gallery/travel_cinematic.jpg)
 
-### Welcome Travel Moment (16:9)
+**Welcome Travel Moment**
 
 ![Welcome Travel Moment](gallery/welcome_travel.jpg)
 
-_Ảnh của hai template CapCut là bản dựng gần đúng từ `draft_info.json` (`gallery/make_capcut_preview.py`), nên không có mask, filter,
-hiệu ứng và chuyển cảnh. Ảnh Spotlight chụp thẳng từ HyperFrames._
+</details>
+
+_GIF Spotlight chụp thẳng từ HyperFrames (`snapshot`, 12 fps). GIF hai template CapCut dựng gần đúng từ `draft_info.json`
+(`gallery/capcut_anim.py`): clip chạy theo thời gian, có mask, fade, khép màn, loé sáng, tông teal–cam. Nhưng font CapCut
+được thay bằng font có sẵn trên máy, và không có animation chữ chi tiết, nên mở trong CapCut mới thấy đúng hình. Cách dựng lại
+GIF: xem [gallery/README.md](gallery/README.md)._
 
 ## Dùng nhanh
 
@@ -64,7 +81,7 @@ spotlight_916/        HyperFrames: index.html + compositions/ + assets/sfx/
 travel_cinematic/     CapCut: build_template.py, beats.py (đo BPM), draft_check.py, stock/credits.tsv
 welcome_travel/       CapCut: build_template.py (dùng chung write_draft, beats của travel_cinematic)
 research/             Ghi chép phân tích reel mẫu + script đo khung hình (measure.py, tile.py, preview_draft.py)
-gallery/              Ảnh xem trước + script dựng ảnh
+gallery/              GIF, ảnh xem trước + script dựng (capcut_anim.py, make_gallery_gif.py)
 tools/capcut-cli/     package.json ghim capcut-cli (chỉ dùng để lint)
 playbook/             Sổ tay dựng video (kịch bản, TTS, phụ đề, SFX, loudness, HyperFrames, QA, lệnh ffmpeg)
 BAO_CAO_CAPCUT_TEMPLATE.md   Ghi chép định dạng draft CapCut 9.5 macOS và cách sinh template

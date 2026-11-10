@@ -1,5 +1,9 @@
 # Template "Travel Cinematic" (dựng lại theo reel Srm Template)
 
+![Travel Cinematic](../gallery/travel_cinematic.gif)
+
+_GIF dựng gần đúng từ draft (font thay thế, chưa có animation chữ chi tiết)._
+
 Nguồn tham khảo: https://www.facebook.com/reel/1863922174979264. Template gốc có 14 clip, khung 16:9, dài 22,5 giây.
 Bản này dựng lại **bố cục, nhịp cắt và kiểu chữ**. Không dùng lại video hay nhạc của tác giả.
 

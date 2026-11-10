@@ -1,5 +1,9 @@
 # Template "Welcome Travel Moment" (dựng lại theo reel của Vindhx CapCut)
 
+![Welcome Travel Moment](../gallery/welcome_travel.gif)
+
+_GIF dựng gần đúng từ draft (font thay thế, chưa có animation chữ chi tiết)._
+
 Nguồn tham khảo: https://www.facebook.com/reel/2054401788599994 ("New Template || Welcome Travel Moment"). Reel là bản
 quay màn hình trình sửa CapCut mobile. Phần xem trước 16:9 dùng 52 clip màu giữ chỗ "CLIPS 1…52", nên đo được chính xác
 từng nhịp cắt. Bản này dựng lại **bố cục, nhịp cắt, chuyển động và kiểu chữ**. Không dùng lại nhạc của tác giả.

@@ -1,6 +1,6 @@
 # Template "Spotlight Reveal" 9:16 (HyperFrames)
 
-![Spotlight Reveal](../gallery/spotlight_916.jpg)
+<img src="../gallery/spotlight_916.gif" width="270" alt="Spotlight Reveal">
 
 Dựng lại ý tưởng reel "Motion video" của Rj Design ([phân tích](../research/fb_14t4VadzQ7w/BAO_CAO.md)) cho khung dọc.
 Bản này chỉ giữ **ý tưởng, nhịp và cách dựng**. Chữ, logo và âm thanh đều làm mới, không dùng lại đồ hoạ của tác giả.

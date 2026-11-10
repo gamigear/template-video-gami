@@ -12,6 +12,7 @@ renders/
 # Media có giấy phép không cho phân phối lại (xem credits.tsv / README từng template)
 travel_cinematic/stock/*.mp4
 travel_cinematic/music/
+logo_nova_916/assets/music/*.mp3
 
 # Clip giữ chỗ: tạo lại bằng make_placeholders.py
 */placeholders/
@@ -22,6 +23,9 @@ research/*/
 !research/fb_14t4VadzQ7w/
 research/fb_14t4VadzQ7w/*
 !research/fb_14t4VadzQ7w/BAO_CAO.md
+!research/reel_1377549584591197/
+research/reel_1377549584591197/*
+!research/reel_1377549584591197/BAO_CAO.md
 
 # Bộ nhớ đệm của Studio
 .waveform-cache/

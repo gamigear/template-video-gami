@@ -1,0 +1,52 @@
+<html
+  data-composition-variables='[
+    {"id":"hook1","type":"string","label":"Hook dòng 1","default":"Logo này"},
+    {"id":"hook2","type":"string","label":"Hook dòng 2","default":"ra đời thế nào?"}
+  ]'
+>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    #hk-box {
+      position: absolute;
+      left: 90px;
+      top: 190px;
+      width: 900px;
+      text-align: center;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    }
+    #hk-1 {
+      font-size: 64px;
+      line-height: 76px;
+    }
+    #hk-2 {
+      font-size: 84px;
+      line-height: 96px;
+      color: #9bc0ff;
+    }
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1080" data-height="1920">
+    <div id="hk-box">
+      <div id="hk-1" data-var-text="hook1">Logo này</div>
+      <div id="hk-2" data-var-text="hook2">ra đời thế nào?</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // Khung 0 đã đủ hai dòng, nét (ảnh bìa)
+      // Thoát cùng lúc logo được cắt (≈ 2,35 s)
+      tl.to("#hk-1, #hk-2", { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", stagger: 0.06 }, 2.2);
+      tl.to({}, { duration: 0.01 }, 2.58);
+      window.__timelines["hook"] = tl;
+    })();
+  </script>
+</template>
+</html>

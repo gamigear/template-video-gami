@@ -14,20 +14,26 @@ Có hai loại:
 
 <table>
 <tr>
-<td align="center" valign="top" width="22%"><a href="spotlight_916/"><img src="gallery/spotlight_916.gif" width="160" alt="Spotlight Reveal"></a><br>🔴 <b>Spotlight Reveal</b><br><sub>HyperFrames · 9:16 · 11,5 s</sub></td>
-<td align="center" valign="top" width="39%"><a href="travel_cinematic/"><img src="gallery/travel_cinematic.gif" width="300" alt="Travel Cinematic"></a><br>🟢 <b>Travel Cinematic</b><br><sub>CapCut · 16:9 · 22,5 s · 14 clip</sub></td>
-<td align="center" valign="top" width="39%"><a href="welcome_travel/"><img src="gallery/welcome_travel.gif" width="300" alt="Welcome Travel Moment"></a><br>🟡 <b>Welcome Travel Moment</b><br><sub>CapCut · 16:9 · 25,5 s · 52 clip</sub></td>
+<td align="center" valign="top" width="18%"><a href="logo_nova_916/"><img src="gallery/logo_nova_916.gif" width="160" alt="Logo Nova"></a><br>🔵 <b>Logo Nova</b><br><sub>HyperFrames · 9:16 · 18,8 s</sub></td>
+<td align="center" valign="top" width="18%"><a href="spotlight_916/"><img src="gallery/spotlight_916.gif" width="160" alt="Spotlight Reveal"></a><br>🔴 <b>Spotlight Reveal</b><br><sub>HyperFrames · 9:16 · 11,5 s</sub></td>
+<td align="center" valign="top" width="32%"><a href="travel_cinematic/"><img src="gallery/travel_cinematic.gif" width="300" alt="Travel Cinematic"></a><br>🟢 <b>Travel Cinematic</b><br><sub>CapCut · 16:9 · 22,5 s · 14 clip</sub></td>
+<td align="center" valign="top" width="32%"><a href="welcome_travel/"><img src="gallery/welcome_travel.gif" width="300" alt="Welcome Travel Moment"></a><br>🟡 <b>Welcome Travel Moment</b><br><sub>CapCut · 16:9 · 25,5 s · 52 clip</sub></td>
 </tr>
 </table>
 
 | Template | Loại | Khung · độ dài | Cách hoạt động |
 |---|---|---|---|
+| 🔵 **[Logo Nova](logo_nova_916/)** | HyperFrames | 9:16 · 18,8 s | "Process reel": màn laptop mở phần mềm dựng, logo biến hình 3D → nét → chữ → mockup điện thoại → 11 biến thể, 2 cú lồi khỏi màn, cắt theo phách 115 BPM, kết lặp về khung đầu |
 | 🔴 **[Spotlight Reveal](spotlight_916/)** | HyperFrames | 9:16 · 11,5 s | Đèn rọi tự lắp ráp, quét chùm sáng làm lộ 4 dịch vụ rồi logo và handle. Chữ mono kiểu công nghệ, chỉ dùng SFX |
 | 🟢 **[Travel Cinematic](travel_cinematic/)** | CapCut | 16:9 · 22,5 s · 14 clip | Mở bằng dải dọc theo phách, chữ LOCATION đỏ, thẻ tiêu đề "Moments", montage theo beat 120 BPM, tông teal–cam |
 | 🟡 **[Welcome Travel Moment](welcome_travel/)** | CapCut | 16:9 · 25,5 s · 52 clip | WELCOME đổi font từng nhịp, letterbox mở dần, tiêu đề Didone, khung lồng bật nấc, cuộn dọc, cắt theo phách 133 BPM |
 
 <details>
 <summary>Dải khung hình chính (ảnh tĩnh)</summary>
+
+**Logo Nova**
+
+![Logo Nova](gallery/logo_nova_916.jpg)
 
 **Spotlight Reveal**
 
@@ -43,7 +49,7 @@ Có hai loại:
 
 </details>
 
-_GIF Spotlight chụp thẳng từ HyperFrames (`snapshot`, 12 fps). GIF hai template CapCut dựng gần đúng từ `draft_info.json`
+_GIF Logo Nova và Spotlight chụp thẳng từ HyperFrames (`snapshot`, 12 fps). GIF hai template CapCut dựng gần đúng từ `draft_info.json`
 (`gallery/capcut_anim.py`): clip chạy theo thời gian, có mask, fade, khép màn, loé sáng, tông teal–cam. Nhưng font CapCut
 được thay bằng font có sẵn trên máy, và không có animation chữ chi tiết, nên mở trong CapCut mới thấy đúng hình. Cách dựng lại
 GIF: xem [gallery/README.md](gallery/README.md)._
@@ -77,6 +83,7 @@ chạy `npm ci --prefix tools/capcut-cli` để cài.
 ## Cấu trúc
 
 ```
+logo_nova_916/        HyperFrames: index.html + compositions/ (room, build, wordmark, popout, variants, glass, hook)
 spotlight_916/        HyperFrames: index.html + compositions/ + assets/sfx/
 travel_cinematic/     CapCut: build_template.py, beats.py (đo BPM), draft_check.py, stock/credits.tsv
 welcome_travel/       CapCut: build_template.py (dùng chung write_draft, beats của travel_cinematic)
@@ -92,7 +99,7 @@ BAO_CAO_CAPCUT_TEMPLATE.md   Ghi chép định dạng draft CapCut 9.5 macOS và
 | Thứ | Lý do | Lấy lại |
 |---|---|---|
 | 14 clip Pexels của bản demo | Giấy phép Pexels không cho đăng lại nguyên bản | `sh travel_cinematic/stock/download_stock.sh` (nguồn, tác giả ở `credits.tsv`) |
-| 4 bài nhạc Mixkit | Giấy phép Mixkit Free cấm phân phối lại | Dùng nhạc của bạn (`--music`) |
+| 4 bài nhạc Mixkit, nhạc của Logo Nova | Giấy phép Mixkit Free cấm phân phối lại | Dùng nhạc của bạn (`--music`); Logo Nova: xem `logo_nova_916/assets/music/CREDITS.md` |
 | Clip giữ chỗ | Tạo lại được | `make_placeholders.py` trong từng template |
 | Video, khung hình reel mẫu | Nội dung của tác giả khác, chỉ dùng để phân tích | Xem link nguồn trong README từng template |
 
@@ -100,6 +107,6 @@ Bản demo `welcome_travel` trong README dùng `travel_cinematic/stock/*.mp4`. H
 
 ## Giấy phép tài nguyên
 
-- SFX trong `spotlight_916/assets/sfx/` lấy từ Pixabay (Pixabay Content License, dùng thương mại không cần ghi nguồn).
+- SFX trong `spotlight_916/assets/sfx/` và `logo_nova_916/assets/sfx/` lấy từ Pixabay (Pixabay Content License, dùng thương mại không cần ghi nguồn).
   `whoosh-b`/`whoosh-c` là bản đổi tốc độ của `whoosh.mp3`.
-- Font: HyperFrames dùng JetBrains Mono, Space Mono (Google Fonts, OFL). CapCut dùng font miễn phí có sẵn trong CapCut.
+- Font: HyperFrames dùng JetBrains Mono, Space Mono, Inter, Poppins (Google Fonts, OFL). CapCut dùng font miễn phí có sẵn trong CapCut.

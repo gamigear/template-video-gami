@@ -1,0 +1,61 @@
+<html>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    /* Giống .plane trong room.html */
+    .plane {
+      position: absolute;
+      left: -360px;
+      top: 325px;
+      width: 1800px;
+      height: 1150px;
+      transform: perspective(2400px) rotateX(7deg) rotateY(-10deg) rotateZ(-4deg);
+      transform-origin: 50% 50%;
+      overflow: hidden;
+    }
+    /* Loá kính chéo */
+    #gl-glare {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.07) 42%, rgba(255, 255, 255, 0) 55%);
+    }
+    /* Dải LED vàng phản chiếu trên màn */
+    #gl-led {
+      position: absolute;
+      left: 160px;
+      top: 830px;
+      width: 1100px;
+      height: 10px;
+      border-radius: 5px;
+      background: rgba(255, 214, 130, 0.4);
+      box-shadow: 0 0 24px 8px rgba(255, 190, 90, 0.28);
+      transform: rotate(-9deg);
+    }
+    /* Bóng tối của người cầm máy phản chiếu */
+    #gl-shadow {
+      position: absolute;
+      left: 760px;
+      top: 560px;
+      width: 700px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0));
+    }
+  </style>
+  <div id="root" data-composition-id="glass" data-width="1080" data-height="1920">
+    <div class="plane" data-layout-allow-overflow>
+      <div id="gl-glare"></div>
+      <div id="gl-shadow"></div>
+      <div id="gl-led"></div>
+    </div>
+  </div>
+  <script>
+    window.__timelines["glass"] = gsap.timeline({ paused: true });
+  </script>
+</template>
+</html>

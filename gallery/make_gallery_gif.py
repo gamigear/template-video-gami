@@ -24,6 +24,7 @@ MONO = "/System/Library/Fonts/Menlo.ttc"
 
 # (tên, dòng phụ, màu chấm, mẫu đường dẫn khung, fps của khung, tỉ lệ rộng/cao)
 CARDS = [
+    ("Logo Nova", "HyperFrames · 9:16", (59, 123, 255), "/tmp/gif_nova_seq/f*.png", 225 / 18.7, 9 / 16),
     ("Spotlight Reveal", "HyperFrames · 9:16", (232, 72, 85), "/tmp/gif_spot_seq/f*.png", 139 / 11.5, 9 / 16),
     ("Travel Cinematic", "CapCut · 16:9", (64, 196, 180), "/tmp/gif_tc/f*.png", 10, 16 / 9),
     ("Welcome Travel Moment", "CapCut · 16:9", (245, 196, 66), "/tmp/gif_wt/f*.png", 10, 16 / 9),

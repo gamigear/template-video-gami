@@ -1,0 +1,253 @@
+<html
+  data-composition-variables='[
+    {"id":"brand","type":"string","label":"Tên thương hiệu","default":"nova"},
+    {"id":"posts","type":"string","label":"Số bài","default":"24"},
+    {"id":"followers","type":"string","label":"Người theo dõi","default":"18,4K"},
+    {"id":"bio","type":"string","label":"Mô tả trang","default":"Thiết kế gọn, nhận diện rõ"},
+    {"id":"site","type":"string","label":"Website","default":"nova.studio"}
+  ]'
+>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    /* Giống .plane trong room.html */
+    .plane {
+      position: absolute;
+      left: -360px;
+      top: 325px;
+      width: 1800px;
+      height: 1150px;
+      transform: perspective(2400px) rotateX(7deg) rotateY(-10deg) rotateZ(-4deg);
+      transform-origin: 50% 50%;
+    }
+    .cv {
+      position: absolute;
+      left: 300px;
+      top: 130px;
+      width: 1200px;
+      height: 740px;
+      overflow: hidden;
+      background: #141519;
+    }
+    /* Lớp lồi khỏi màn: toạ độ khung hình, không bị .plane cắt */
+    #po-word-wrap {
+      position: absolute;
+      left: -100px;
+      top: 620px;
+      width: 1280px;
+      height: 420px;
+      perspective: 1600px;
+    }
+    #po-word {
+      position: absolute;
+      inset: 0;
+      text-align: center;
+      font-family: "Poppins", sans-serif;
+      font-weight: 700;
+      font-size: 400px;
+      line-height: 420px;
+      letter-spacing: -14px;
+      color: #f4f6ff;
+      text-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
+    }
+    #po-mark {
+      position: absolute;
+      left: 390px;
+      top: 680px;
+      width: 300px;
+      height: 300px;
+      overflow: visible;
+    }
+    #po-disc {
+      position: absolute;
+      left: 390px;
+      top: 680px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: #2f6bff;
+    }
+    #po-disc,
+    #po-phone-wrap {
+      opacity: 0;
+    }
+    #po-phone-wrap {
+      position: absolute;
+      left: 170px;
+      top: 470px;
+      width: 760px;
+      height: 1300px;
+      perspective: 1800px;
+    }
+    #po-phone {
+      position: absolute;
+      left: 80px;
+      top: 0;
+      width: 600px;
+      height: 1240px;
+      border-radius: 90px;
+      padding: 22px;
+      background: linear-gradient(110deg, #f2f2f5 0%, #8d8f96 18%, #e9e9ee 40%, #75777e 70%, #dcdce2 100%);
+      box-shadow: 0 60px 120px rgba(0, 0, 0, 0.6);
+    }
+    #po-screen {
+      position: absolute;
+      inset: 22px;
+      border-radius: 70px;
+      background: #fafafa;
+      overflow: hidden;
+      font-family: "Inter", sans-serif;
+      color: #111;
+    }
+    #po-avatar {
+      position: absolute;
+      left: 46px;
+      top: 120px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: #2f6bff;
+      box-shadow: 0 0 0 7px #fafafa, 0 0 0 12px #e2453c;
+    }
+    #po-avatar svg {
+      position: absolute;
+      left: 35px;
+      top: 35px;
+      width: 120px;
+      height: 120px;
+    }
+    #po-name {
+      position: absolute;
+      left: 270px;
+      top: 118px;
+      font-weight: 700;
+      font-size: 40px;
+    }
+    .po-stat {
+      position: absolute;
+      top: 180px;
+      font-size: 28px;
+      line-height: 32px;
+      color: #333;
+    }
+    .po-stat b {
+      display: block;
+      font-size: 40px;
+      line-height: 46px;
+      color: #111;
+    }
+    #po-bio {
+      position: absolute;
+      left: 46px;
+      top: 350px;
+      font-size: 32px;
+      font-weight: 500;
+    }
+    #po-site {
+      position: absolute;
+      left: 46px;
+      top: 400px;
+      font-size: 30px;
+      color: #2f5bd8;
+    }
+    .po-btn {
+      position: absolute;
+      top: 470px;
+      height: 70px;
+      border-radius: 16px;
+      background: #ececf0;
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 70px;
+      text-align: center;
+    }
+    .po-tile {
+      position: absolute;
+      width: 176px;
+      height: 176px;
+      background: #2f6bff;
+    }
+  </style>
+
+  <div id="root" data-composition-id="popout" data-width="1080" data-height="1920">
+    <div class="plane" data-layout-allow-overflow>
+      <div class="cv"></div>
+    </div>
+
+    <!-- Pop-out 1: chữ khổng lồ tràn khỏi màn -->
+    <div id="po-word-wrap" data-layout-allow-overflow data-layout-allow-overlap>
+      <div id="po-word" data-var-text="brand">nova</div>
+    </div>
+    <svg id="po-mark" viewBox="0 0 200 200" data-layout-allow-overlap>
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#3b7bff" stroke-width="34" stroke-dasharray="354.3 85.5" transform="rotate(-10 100 100)" />
+      <circle cx="149.5" cy="50.5" r="17" fill="#3b7bff" />
+    </svg>
+    <div id="po-disc" data-layout-allow-overlap></div>
+
+    <!-- Pop-out 2: điện thoại hiện trang mạng xã hội -->
+    <div id="po-phone-wrap" data-layout-allow-overflow data-layout-allow-overlap>
+      <div id="po-phone">
+        <div id="po-screen">
+          <div id="po-avatar">
+            <svg viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#fff" stroke-width="34" stroke-dasharray="354.3 85.5" transform="rotate(-10 100 100)" />
+              <circle cx="149.5" cy="50.5" r="17" fill="#fff" />
+            </svg>
+          </div>
+          <div id="po-name" data-var-text="brand">nova</div>
+          <div class="po-stat" style="left: 270px"><b data-var-text="posts">24</b>bài viết</div>
+          <div class="po-stat" style="left: 410px"><b data-var-text="followers">18,4K</b>theo dõi</div>
+          <div id="po-bio" data-var-text="bio">Thiết kế gọn, nhận diện rõ</div>
+          <div id="po-site" data-var-text="site">nova.studio</div>
+          <div class="po-btn" style="left: 46px; width: 250px">Đang theo dõi</div>
+          <div class="po-btn" style="left: 310px; width: 200px">Nhắn tin</div>
+          <div class="po-tile" style="left: 0; top: 580px; background: #2f6bff"></div>
+          <div class="po-tile" style="left: 180px; top: 580px; background: #0b1a3a"></div>
+          <div class="po-tile" style="left: 360px; top: 580px; background: #9bbcff"></div>
+          <div class="po-tile" style="left: 0; top: 760px; background: #e9edf8"></div>
+          <div class="po-tile" style="left: 180px; top: 760px; background: #3b7bff"></div>
+          <div class="po-tile" style="left: 360px; top: 760px; background: #141519"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const T2 = 1.0333; // phách 22: sang điện thoại
+      const tl = gsap.timeline({ paused: true });
+
+      // 1 · chữ bật ra khỏi màn: từ nhỏ (trong màn) lên khổng lồ, nhoè → nét
+      tl.fromTo(
+        "#po-word",
+        { scale: 0.32, rotationY: -24, y: 60, filter: "blur(10px)" },
+        { scale: 1, rotationY: -12, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out" },
+        0,
+      );
+      // logo xoay 3D ở giữa chữ
+      tl.fromTo("#po-mark", { rotationY: 0, scale: 0.6 }, { rotationY: 360, scale: 1, duration: 0.8, ease: "power2.inOut" }, 0.05);
+      // chấm phồng thành đĩa xanh = ảnh đại diện ở cảnh sau (match cut)
+      tl.set("#po-disc", { opacity: 1, scale: 0.1 }, 0.82);
+      tl.to("#po-disc", { scale: 1.15, duration: 0.2, ease: "power3.in" }, 0.82);
+      tl.to("#po-word", { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power3.in" }, 0.86);
+
+      // 2 · điện thoại trồi lên, lồi khỏi mép dưới màn
+      tl.set("#po-word, #po-mark, #po-disc", { opacity: 0 }, T2);
+      tl.set("#po-phone-wrap", { opacity: 1 }, T2);
+      tl.fromTo(
+        "#po-phone",
+        { y: 260, rotationY: -26, rotationZ: -6, scale: 1.08 },
+        { y: 0, rotationY: -16, rotationZ: -3, scale: 1, duration: 0.55, ease: "expo.out" },
+        T2,
+      );
+      tl.fromTo("#po-avatar", { scale: 1.25 }, { scale: 1, duration: 0.45, ease: "expo.out" }, T2);
+      tl.to({}, { duration: 0.01 }, 2.08);
+      window.__timelines["popout"] = tl;
+    })();
+  </script>
+</template>
+</html>

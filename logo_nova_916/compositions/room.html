@@ -1,0 +1,288 @@
+<html>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #0b0907;
+    }
+    /* Tường phòng: ánh vàng ấm, dải LED trần chéo góc trên phải */
+    #rm-wall {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(120% 40% at 70% 0%, #b39a6a 0%, #6d5a3a 35%, #2a2116 70%, #0b0907 100%);
+    }
+    #rm-led {
+      position: absolute;
+      left: 560px;
+      top: 40px;
+      width: 760px;
+      height: 16px;
+      border-radius: 8px;
+      background: #ffe7a0;
+      box-shadow: 0 0 30px 10px rgba(255, 200, 90, 0.55), 0 0 90px 40px rgba(255, 180, 60, 0.25);
+      transform: rotate(-14deg);
+    }
+    /* Mặt phẳng màn hình: mọi cảnh trong màn dùng đúng khối CSS .plane này */
+    .plane {
+      position: absolute;
+      left: -360px;
+      top: 325px;
+      width: 1800px;
+      height: 1150px;
+      transform: perspective(2400px) rotateX(7deg) rotateY(-10deg) rotateZ(-4deg);
+      transform-origin: 50% 50%;
+    }
+    #rm-bezel {
+      position: absolute;
+      left: -34px;
+      top: -34px;
+      right: -34px;
+      bottom: -60px;
+      border-radius: 34px;
+      background: linear-gradient(180deg, #121214, #050506);
+      box-shadow: 0 0 0 3px #2c2c30, 0 40px 120px rgba(0, 0, 0, 0.8);
+    }
+    #rm-notch {
+      position: absolute;
+      left: 820px;
+      top: -34px;
+      width: 160px;
+      height: 32px;
+      border-radius: 0 0 14px 14px;
+      background: #000;
+    }
+    #rm-screen {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #1b1b1d;
+      font-family: "Inter", sans-serif;
+      color: #9a9aa2;
+    }
+    #rm-menubar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 40px;
+      background: #2a2a2e;
+      font-size: 19px;
+      line-height: 40px;
+      padding-left: 24px;
+      white-space: nowrap;
+      color: #d8d8de;
+    }
+    #rm-menubar b {
+      margin-right: 26px;
+    }
+    #rm-menubar span {
+      margin-right: 24px;
+    }
+    #rm-apptitle {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 44px;
+      text-align: center;
+      font-size: 16px;
+      color: #7d7d86;
+    }
+    #rm-tabs {
+      position: absolute;
+      left: 300px;
+      top: 78px;
+      width: 1200px;
+      height: 44px;
+      border-bottom: 2px solid #3b6cf0;
+      font-size: 18px;
+      line-height: 44px;
+      padding-left: 18px;
+      color: #c9c9d0;
+    }
+    #rm-left,
+    #rm-right {
+      position: absolute;
+      top: 78px;
+      height: 800px;
+      background: #222226;
+    }
+    #rm-left {
+      left: 0;
+      width: 290px;
+    }
+    #rm-right {
+      left: 1510px;
+      width: 290px;
+    }
+    .rm-row {
+      height: 16px;
+      margin: 22px 20px;
+      border-radius: 4px;
+      background: #303036;
+    }
+    #rm-cv {
+      position: absolute;
+      left: 300px;
+      top: 130px;
+      width: 1200px;
+      height: 740px;
+      background: #2b2b2e;
+    }
+    #rm-tlpanel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 886px;
+      height: 224px;
+      background: #1f1f22;
+      border-top: 2px solid #34343a;
+    }
+    #rm-tc {
+      position: absolute;
+      left: 430px;
+      top: 12px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 26px;
+      color: #4d8dff;
+    }
+    #rm-ruler {
+      position: absolute;
+      left: 640px;
+      right: 50px;
+      top: 14px;
+      height: 22px;
+      background: repeating-linear-gradient(90deg, #55555e 0 2px, transparent 2px 72px);
+      opacity: 0.6;
+    }
+    .rm-layer {
+      position: absolute;
+      left: 300px;
+      height: 22px;
+      border-radius: 4px;
+      opacity: 0.85;
+    }
+    .rm-lname {
+      position: absolute;
+      left: 22px;
+      height: 22px;
+      font-size: 15px;
+      line-height: 22px;
+      color: #8c8c95;
+    }
+    #rm-playhead {
+      position: absolute;
+      left: 300px;
+      top: 8px;
+      width: 3px;
+      height: 200px;
+      background: #4d8dff;
+    }
+    #rm-dock {
+      position: absolute;
+      left: 560px;
+      right: 560px;
+      top: 1112px;
+      height: 38px;
+      border-radius: 12px;
+      background: rgba(60, 60, 70, 0.8);
+      display: flex;
+      gap: 10px;
+      padding: 5px 14px;
+    }
+    #rm-dock i {
+      display: block;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+    }
+    /* Mặt bàn phím dưới màn */
+    #rm-deck {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 1560px;
+      bottom: 0;
+      background: linear-gradient(180deg, #17171a 0%, #0a0a0b 100%);
+    }
+  </style>
+
+  <div id="root" data-composition-id="room" data-width="1080" data-height="1920">
+    <div id="rm-wall"></div>
+    <div id="rm-led" data-layout-allow-overflow></div>
+    <div id="rm-deck"></div>
+    <div class="plane" data-layout-allow-overflow>
+      <div id="rm-bezel"></div>
+      <div id="rm-notch"></div>
+      <div id="rm-screen">
+        <div id="rm-menubar" data-layout-ignore>
+          <b>Motion Studio</b><span>File</span><span>Edit</span><span>Composition</span><span>Layer</span
+          ><span>Effect</span><span>View</span><span>Window</span><span>Help</span>
+        </div>
+        <div id="rm-apptitle" data-layout-ignore>Motion Studio 2026 · nova_logo.mstd</div>
+        <div id="rm-left">
+          <div class="rm-row" style="width: 70%"></div>
+          <div class="rm-row" style="width: 55%"></div>
+          <div class="rm-row" style="width: 80%"></div>
+          <div class="rm-row" style="width: 45%"></div>
+          <div class="rm-row" style="width: 62%"></div>
+        </div>
+        <div id="rm-right">
+          <div class="rm-row" style="width: 50%"></div>
+          <div class="rm-row" style="width: 75%"></div>
+          <div class="rm-row" style="width: 60%"></div>
+        </div>
+        <div id="rm-tabs" data-layout-ignore>Composition: nova_logo ≡</div>
+        <div id="rm-cv"></div>
+        <div id="rm-tlpanel">
+          <div id="rm-tc" data-layout-ignore>0:00:00:00</div>
+          <div id="rm-ruler"></div>
+          <div class="rm-lname" data-layout-ignore style="top: 56px">1 ◆ mark</div>
+          <div class="rm-lname" data-layout-ignore style="top: 92px">2 T wordmark</div>
+          <div class="rm-lname" data-layout-ignore style="top: 128px">3 ▢ mockup</div>
+          <div class="rm-lname" data-layout-ignore style="top: 164px">4 ◐ light</div>
+          <div class="rm-layer" style="top: 56px; width: 780px; background: #3d6fd9"></div>
+          <div class="rm-layer" style="top: 92px; left: 560px; width: 620px; background: #c96b3a"></div>
+          <div class="rm-layer" style="top: 128px; left: 920px; width: 300px; background: #7a5cc9"></div>
+          <div class="rm-layer" style="top: 164px; width: 1400px; background: #4b8a5a"></div>
+          <div id="rm-playhead"></div>
+        </div>
+        <div id="rm-dock">
+          <i style="background: #4d8dff"></i><i style="background: #2fbf71"></i><i style="background: #f2b233"></i
+          ><i style="background: #e2453c"></i><i style="background: #9a6cf0"></i><i style="background: #2a2a8f"></i
+          ><i style="background: #d9d9de"></i><i style="background: #ff7a2f"></i><i style="background: #18a0c9"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const root = document.querySelector('[data-composition-id="room"]');
+      const tc = root.querySelector("#rm-tc");
+      const DUR = 18.7667;
+      const pad = (n) => String(n).padStart(2, "0");
+      const clock = { t: 0 };
+      const tl = gsap.timeline({ paused: true });
+      // Đồng hồ timeline chạy khớp thời gian video, như trong reel gốc
+      tl.to(
+        clock,
+        {
+          t: DUR,
+          duration: DUR,
+          ease: "none",
+          onUpdate: () => {
+            const f = Math.floor(clock.t * 30 + 1e-6);
+            tc.textContent = `0:00:${pad(Math.floor(f / 30))}:${pad(f % 30)}`;
+          },
+        },
+        0,
+      );
+      tl.fromTo("#rm-playhead", { x: 0 }, { x: 980, duration: DUR, ease: "none" }, 0);
+      window.__timelines["room"] = tl;
+    })();
+  </script>
+</template>
+</html>

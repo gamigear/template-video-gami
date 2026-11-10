@@ -1,0 +1,164 @@
+<html>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    /* Giống .plane trong room.html: sửa góc màn hình thì sửa cả hai nơi */
+    .plane {
+      position: absolute;
+      left: -360px;
+      top: 325px;
+      width: 1800px;
+      height: 1150px;
+      transform: perspective(2400px) rotateX(7deg) rotateY(-10deg) rotateZ(-4deg);
+      transform-origin: 50% 50%;
+    }
+    .cv {
+      position: absolute;
+      left: 300px;
+      top: 130px;
+      width: 1200px;
+      height: 740px;
+      overflow: hidden;
+      background: #141519;
+    }
+    #bd-stage {
+      position: absolute;
+      left: 420px;
+      top: 190px;
+      width: 360px;
+      height: 360px;
+    }
+    #bd-stage svg {
+      position: absolute;
+      inset: 0;
+      width: 360px;
+      height: 360px;
+      overflow: visible;
+    }
+    #bd-sel {
+      position: absolute;
+      left: -40px;
+      top: -40px;
+      width: 440px;
+      height: 440px;
+      border: 2px dashed rgba(170, 190, 255, 0.7);
+    }
+    #bd-sel i {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #dfe6ff;
+      border: 2px solid #3b6cf0;
+    }
+    #bd-flat,
+    #bd-knife,
+    #bd-cursor,
+    #bd-mark,
+    #bd-angle {
+      opacity: 0;
+    }
+    #bd-angle {
+      position: absolute;
+      left: 300px;
+      top: 0px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #f2c94c;
+      color: #111;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+      font-size: 30px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="build" data-width="1080" data-height="1920">
+    <div class="plane" data-layout-allow-overflow>
+      <div class="cv">
+        <div id="bd-stage">
+          <svg viewBox="0 0 200 200">
+            <defs>
+              <radialGradient id="bd-ball" cx="0.36" cy="0.32" r="0.75">
+                <stop id="bd-hi" offset="0" stop-color="#cfe0ff" />
+                <stop offset="0.35" stop-color="#4d8dff" />
+                <stop offset="1" stop-color="#0b2a8a" />
+              </radialGradient>
+              <linearGradient id="bd-shine" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0" stop-color="#fff" stop-opacity="0" />
+                <stop offset="0.5" stop-color="#fff" stop-opacity="0.85" />
+                <stop offset="1" stop-color="#fff" stop-opacity="0" />
+              </linearGradient>
+              <clipPath id="bd-clip">
+                <circle cx="100" cy="100" r="87" />
+              </clipPath>
+            </defs>
+            <!-- 1 · Quả cầu 3D -->
+            <g id="bd-sphere">
+              <ellipse cx="100" cy="190" rx="60" ry="9" fill="#000" opacity="0.45" />
+              <circle cx="100" cy="100" r="70" fill="url(#bd-ball)" />
+              <ellipse id="bd-spec" cx="76" cy="70" rx="18" ry="11" fill="#fff" opacity="0.8" transform="rotate(-30 76 70)" />
+            </g>
+            <!-- 2 · Mặt phẳng viền -->
+            <circle id="bd-flat" cx="100" cy="100" r="70" fill="rgba(77,141,255,0.22)" stroke="#6fa3ff" stroke-width="2.5" />
+            <!-- 3 · Đường cắt -->
+            <line id="bd-knife" x1="122" y1="0" x2="200" y2="78" stroke="#fff" stroke-width="2" stroke-dasharray="110" stroke-dashoffset="110" />
+            <polygon id="bd-cursor" points="0,0 0,16 11,11" fill="#fff" />
+            <!-- 4 · Vòng có khe + chấm (logo) -->
+            <g id="bd-mark">
+              <circle id="bd-ring" cx="100" cy="100" r="70" fill="none" stroke="#3b7bff" stroke-width="2.5" stroke-dasharray="439.8 0" transform="rotate(-10 100 100)" />
+              <circle id="bd-dot" cx="149.5" cy="50.5" r="17" fill="#3b7bff" />
+              <g clip-path="url(#bd-clip)">
+                <rect id="bd-sweep" x="-60" y="-20" width="50" height="240" fill="url(#bd-shine)" transform="skewX(-20)" />
+              </g>
+            </g>
+          </svg>
+          <div id="bd-sel"><i style="left: -8px; top: -8px"></i><i style="right: -8px; top: -8px"></i><i style="left: -8px; bottom: -8px"></i><i style="right: -8px; bottom: -8px"></i></div>
+          <div id="bd-angle">70°</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const B = 60 / 115; // một phách nhạc
+      const tl = gsap.timeline({ paused: true });
+
+      // 0 → 1 phách · quả cầu xoay: điểm sáng trượt quanh mặt cầu
+      tl.fromTo("#bd-hi", { attr: { offset: 0 } }, { attr: { offset: 0.12 }, duration: B, ease: "none" }, 0);
+      tl.fromTo("#bd-spec", { x: 0, y: 0 }, { x: 34, y: 6, duration: B * 1.2, ease: "sine.inOut" }, 0);
+
+      // 1 phách · cầu dẹt thành mặt phẳng viền, khung chọn co lại
+      tl.to("#bd-sphere", { opacity: 0, duration: 0.25, ease: "power2.out" }, B);
+      tl.to("#bd-flat", { opacity: 1, duration: 0.25, ease: "power2.out" }, B);
+      tl.fromTo("#bd-sel", { scale: 1 }, { scale: 0.92, duration: 0.4, ease: "expo.out" }, B);
+
+      // 2,5 phách · con trỏ kéo đường cắt chéo góc trên phải, hiện nhãn góc
+      tl.set("#bd-cursor", { opacity: 1, x: 122, y: 0 }, B * 2.5);
+      tl.to("#bd-knife", { opacity: 1, duration: 0.01 }, B * 2.5);
+      tl.to("#bd-knife", { attr: { "stroke-dashoffset": 0 }, duration: 0.45, ease: "power2.inOut" }, B * 2.5);
+      tl.to("#bd-cursor", { x: 200, y: 78, duration: 0.45, ease: "power2.inOut" }, B * 2.5);
+      tl.to("#bd-angle", { opacity: 1, duration: 0.12 }, B * 3.2);
+
+      // 4,5 phách · viền dày thành vòng, mở khe, mảnh cắt co thành chấm
+      const T4 = B * 4.5;
+      tl.to("#bd-knife, #bd-cursor, #bd-angle", { opacity: 0, duration: 0.15 }, T4);
+      tl.to("#bd-flat", { opacity: 0, duration: 0.2 }, T4);
+      tl.set("#bd-mark", { opacity: 1 }, T4);
+      tl.to("#bd-ring", { attr: { "stroke-width": 34, "stroke-dasharray": "354.3 85.5" }, duration: 0.5, ease: "expo.out" }, T4);
+      tl.fromTo("#bd-dot", { scale: 2.2, transformOrigin: "50% 50%", opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, T4 + 0.08);
+      tl.to("#bd-sel", { opacity: 0, duration: 0.2 }, T4 + 0.3);
+
+      // 6 phách · logo hoàn chỉnh: thu nhỏ, vệt sáng lướt qua
+      const T6 = B * 6;
+      tl.to("#bd-stage", { scale: 0.72, duration: 0.6, ease: "expo.out" }, T6);
+      tl.fromTo("#bd-sweep", { x: -40 }, { x: 300, duration: 0.7, ease: "power2.inOut" }, T6 + 0.1);
+      tl.to({}, { duration: 0.01 }, 4.15);
+      window.__timelines["build"] = tl;
+    })();
+  </script>
+</template>
+</html>

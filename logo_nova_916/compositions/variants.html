@@ -1,0 +1,239 @@
+<html>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    /* Giống .plane trong room.html */
+    .plane {
+      position: absolute;
+      left: -360px;
+      top: 325px;
+      width: 1800px;
+      height: 1150px;
+      transform: perspective(2400px) rotateX(7deg) rotateY(-10deg) rotateZ(-4deg);
+      transform-origin: 50% 50%;
+    }
+    .cv {
+      position: absolute;
+      left: 300px;
+      top: 130px;
+      width: 1200px;
+      height: 740px;
+      overflow: hidden;
+    }
+    .vs {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
+    .vs-mk {
+      position: absolute;
+      left: 450px;
+      top: 220px;
+      width: 300px;
+      height: 300px;
+      overflow: visible;
+    }
+    .dark {
+      background: #141519;
+    }
+    .white {
+      background: #eef1f7;
+    }
+    .blue {
+      background: linear-gradient(160deg, #3d86ff, #1257e6);
+    }
+    #vs-paper {
+      position: absolute;
+      left: 380px;
+      top: 70px;
+      width: 440px;
+      height: 600px;
+      background: #fbfbf7;
+      border-radius: 6px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+      transform: rotate(-3deg);
+    }
+    #vs-paper i {
+      position: absolute;
+      top: -16px;
+      width: 16px;
+      height: 34px;
+      border-radius: 8px;
+      border: 4px solid #a9744f;
+    }
+    #vs-icon {
+      position: absolute;
+      left: 420px;
+      top: 190px;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: #0d0e12;
+    }
+    /* quả cầu: giống build.html lúc 0 s để video lặp liền */
+    #vs-ball {
+      position: absolute;
+      left: 420px;
+      top: 190px;
+      width: 360px;
+      height: 360px;
+      overflow: visible;
+    }
+    #vs-sel {
+      position: absolute;
+      left: 380px;
+      top: 150px;
+      width: 440px;
+      height: 440px;
+      border: 2px dashed rgba(170, 190, 255, 0.7);
+    }
+    #vs-sel i {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #dfe6ff;
+      border: 2px solid #3b6cf0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="variants" data-width="1080" data-height="1920">
+    <div class="plane" data-layout-allow-overflow>
+      <div class="cv">
+        <svg width="0" height="0" style="position: absolute">
+          <defs>
+            <symbol id="vs-solid" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="34" stroke-dasharray="354.3 85.5" transform="rotate(-10 100 100)" />
+              <circle cx="149.5" cy="50.5" r="17" fill="currentColor" />
+            </symbol>
+            <symbol id="vs-line" viewBox="0 0 200 200">
+              <g fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="100" cy="100" r="87" stroke-dasharray="547 600" transform="rotate(-10 100 100)" />
+                <circle cx="100" cy="100" r="53" stroke-dasharray="333 400" transform="rotate(-10 100 100)" />
+                <circle cx="149.5" cy="50.5" r="17" />
+                <circle cx="102" cy="98" r="86" stroke-dasharray="40 20" opacity="0.5" />
+              </g>
+            </symbol>
+            <linearGradient id="vs-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#9bc0ff" />
+              <stop offset="1" stop-color="#1d4fe0" />
+            </linearGradient>
+            <pattern id="vs-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+              <line x1="0" y1="0" x2="0" y2="8" stroke="#3a3a3a" stroke-width="3" />
+            </pattern>
+            <radialGradient id="vs-ballg" cx="0.36" cy="0.32" r="0.75">
+              <stop offset="0" stop-color="#cfe0ff" />
+              <stop offset="0.35" stop-color="#4d8dff" />
+              <stop offset="1" stop-color="#0b2a8a" />
+            </radialGradient>
+          </defs>
+        </svg>
+
+        <!-- 1 · nền tối, hai vệt sáng cong quét qua -->
+        <div id="vs-1" class="vs dark">
+          <svg style="position: absolute; inset: 0; width: 1200px; height: 740px">
+            <path id="vs-streak1" d="M60,760 C160,500 140,200 260,-20" fill="none" stroke="#cfe6ff" stroke-width="10" stroke-linecap="round" style="filter: drop-shadow(0 0 14px #6fb0ff)" />
+            <path id="vs-streak2" d="M220,760 C320,500 300,200 420,-20" fill="none" stroke="#cfe6ff" stroke-width="10" stroke-linecap="round" style="filter: drop-shadow(0 0 14px #6fb0ff)" />
+          </svg>
+          <svg class="vs-mk" style="color: #3b7bff; left: 640px; top: 290px; width: 160px; height: 160px"><use href="#vs-solid" /></svg>
+        </div>
+        <!-- 2 · logo trắng phát sáng -->
+        <div id="vs-2" class="vs dark">
+          <svg class="vs-mk" style="color: #eef3ff; filter: drop-shadow(0 0 24px rgba(200, 220, 255, 0.9))"><use href="#vs-solid" /></svg>
+        </div>
+        <!-- 3 · nền xanh, logo nổi có bóng đổ -->
+        <div id="vs-3" class="vs blue">
+          <svg class="vs-mk" style="color: #e9f0ff; left: 510px; top: 230px; width: 180px; height: 180px; filter: drop-shadow(0 50px 18px rgba(0, 20, 80, 0.55))"><use href="#vs-solid" /></svg>
+        </div>
+        <!-- 4 · nền tối, logo chuyển sắc lớn -->
+        <div id="vs-4" class="vs dark">
+          <svg class="vs-mk" style="left: 400px; top: 170px; width: 400px; height: 400px" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="70" fill="none" stroke="url(#vs-grad)" stroke-width="34" stroke-dasharray="354.3 85.5" transform="rotate(-10 100 100)" />
+            <circle cx="149.5" cy="50.5" r="17" fill="#9bc0ff" />
+          </svg>
+        </div>
+        <!-- 5 · phác nét trên nền trắng -->
+        <div id="vs-5" class="vs white">
+          <svg class="vs-mk" style="color: #2a2a2e"><use href="#vs-line" /></svg>
+        </div>
+        <!-- 6 · logo đen phẳng -->
+        <div id="vs-6" class="vs white">
+          <svg class="vs-mk" style="color: #0d0e12"><use href="#vs-solid" /></svg>
+        </div>
+        <!-- 7 · sổ phác thảo bút chì -->
+        <div id="vs-7" class="vs dark">
+          <div id="vs-paper">
+            <i style="left: 40px"></i><i style="left: 100px"></i><i style="left: 160px"></i><i style="left: 220px"></i><i style="left: 280px"></i
+            ><i style="left: 340px"></i><i style="left: 400px"></i>
+            <svg style="position: absolute; left: 70px; top: 150px; width: 300px; height: 300px" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="70" fill="none" stroke="url(#vs-hatch)" stroke-width="34" stroke-dasharray="354.3 85.5" transform="rotate(-10 100 100)" />
+              <circle cx="100" cy="100" r="87" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="547 600" transform="rotate(-10 100 100)" />
+              <circle cx="149.5" cy="50.5" r="17" fill="url(#vs-hatch)" stroke="#333" stroke-width="2" />
+            </svg>
+          </div>
+        </div>
+        <!-- 8 · biểu tượng app tròn -->
+        <div id="vs-8" class="vs white">
+          <div id="vs-icon"></div>
+          <svg class="vs-mk" style="color: #3b7bff; left: 480px; top: 250px; width: 240px; height: 240px"><use href="#vs-solid" /></svg>
+        </div>
+        <!-- 9 · nền xanh, logo kính mờ -->
+        <div id="vs-9" class="vs blue">
+          <svg class="vs-mk" style="color: rgba(220, 235, 255, 0.55); filter: drop-shadow(0 0 2px #fff)"><use href="#vs-solid" /></svg>
+        </div>
+        <!-- 10 · nền tối, logo chuyển sắc -->
+        <div id="vs-10" class="vs dark">
+          <svg class="vs-mk" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="70" fill="none" stroke="url(#vs-grad)" stroke-width="34" stroke-dasharray="354.3 85.5" transform="rotate(-10 100 100)" />
+            <circle cx="149.5" cy="50.5" r="17" fill="#9bc0ff" />
+          </svg>
+        </div>
+        <!-- 11 · nền trắng, logo xanh đậm -->
+        <div id="vs-11" class="vs white">
+          <svg class="vs-mk" style="color: #0b1a3a"><use href="#vs-solid" /></svg>
+        </div>
+        <!-- 12 · về lại quả cầu như khung đầu → lặp -->
+        <div id="vs-12" class="vs" style="background: #141519">
+          <svg id="vs-ball" viewBox="0 0 200 200">
+            <ellipse cx="100" cy="190" rx="60" ry="9" fill="#000" opacity="0.45" />
+            <circle cx="100" cy="100" r="70" fill="url(#vs-ballg)" />
+            <ellipse cx="76" cy="70" rx="18" ry="11" fill="#fff" opacity="0.8" transform="rotate(-30 76 70)" />
+          </svg>
+          <div id="vs-sel"><i style="left: -8px; top: -8px"></i><i style="right: -8px; top: -8px"></i><i style="left: -8px; bottom: -8px"></i><i style="right: -8px; bottom: -8px"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // Mốc cắt (giây, tính từ đầu cảnh), đều trên lưới phách 115 BPM
+      const CUTS = [0, 1.0333, 1.5667, 2.0667, 2.3333, 2.6, 2.8667, 3.1333, 3.3667, 3.6333, 3.9, 4.1667];
+      const tl = gsap.timeline({ paused: true });
+      CUTS.forEach((t, i) => {
+        tl.set(`#vs-${i + 1}`, { opacity: 1 }, t);
+        if (i > 0) tl.set(`#vs-${i}`, { opacity: 0 }, t);
+      });
+
+      // 1 · vệt sáng quét từ trái sang
+      tl.fromTo("#vs-streak1, #vs-streak2", { x: -260 }, { x: 120, duration: 1.0, ease: "power2.out", stagger: 0.08 }, 0);
+      // 2 · logo trắng sáng bừng
+      tl.fromTo("#vs-2 .vs-mk", { scale: 0.85 }, { scale: 1, duration: 0.4, ease: "expo.out" }, 1.0333);
+      // 3 · logo nổi lên
+      tl.fromTo("#vs-3 .vs-mk", { y: 30 }, { y: 0, duration: 0.45, ease: "expo.out" }, 1.5667);
+      // 7 · sổ giơ vào khung
+      tl.fromTo("#vs-paper", { y: 120, rotation: -6 }, { y: 0, rotation: -3, duration: 0.25, ease: "expo.out" }, 2.8667);
+      // 8 · nền tròn phồng
+      tl.fromTo("#vs-icon", { scale: 0.7 }, { scale: 1, duration: 0.22, ease: "expo.out" }, 3.1333);
+      // 12 · quả cầu hiện lại, khung chọn bật lên ở cuối = đúng khung 0 s
+      tl.fromTo("#vs-ball", { scale: 0.6 }, { scale: 1, duration: 0.6, ease: "expo.out" }, 4.1667);
+      tl.fromTo("#vs-sel", { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.3, ease: "expo.out" }, 5.4);
+      tl.to({}, { duration: 0.01 }, 6.22);
+      window.__timelines["variants"] = tl;
+    })();
+  </script>
+</template>
+</html>

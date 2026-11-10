@@ -1,0 +1,140 @@
+<html
+  data-composition-variables='[
+    {"id":"brand","type":"string","label":"Tên thương hiệu","default":"nova"}
+  ]'
+>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    /* Giống .plane trong room.html */
+    .plane {
+      position: absolute;
+      left: -360px;
+      top: 325px;
+      width: 1800px;
+      height: 1150px;
+      transform: perspective(2400px) rotateX(7deg) rotateY(-10deg) rotateZ(-4deg);
+      transform-origin: 50% 50%;
+    }
+    .cv {
+      position: absolute;
+      left: 300px;
+      top: 130px;
+      width: 1200px;
+      height: 740px;
+      overflow: hidden;
+    }
+    #wm-white {
+      position: absolute;
+      inset: 0;
+      background: #eef1f7;
+    }
+    #wm-dark {
+      position: absolute;
+      inset: 0;
+      background: #141519;
+    }
+    #wm-big {
+      position: absolute;
+      left: 420px;
+      top: 190px;
+      width: 360px;
+      height: 360px;
+      overflow: visible;
+    }
+    #wm-dark,
+    #wm-lock {
+      opacity: 0;
+    }
+    #wm-lock {
+      position: absolute;
+      left: 200px;
+      top: 250px;
+      width: 800px;
+      height: 240px;
+      overflow: visible;
+    }
+    .wm-word {
+      font-family: "Poppins", sans-serif;
+      font-weight: 700;
+      font-size: 210px;
+      letter-spacing: -6px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="wordmark" data-width="1080" data-height="1920">
+    <div class="plane" data-layout-allow-overflow>
+      <div class="cv">
+        <div id="wm-white"></div>
+        <div id="wm-dark"></div>
+        <!-- Cảnh A: logo đặc lớn trên nền comp trắng -->
+        <svg id="wm-big" viewBox="0 0 200 200">
+          <circle id="wm-big-ring" cx="100" cy="100" r="70" fill="none" stroke="#3b7bff" stroke-width="34" stroke-dasharray="354.3 85.5" transform="rotate(-10 100 100)" />
+          <circle cx="149.5" cy="50.5" r="17" fill="#3b7bff" />
+        </svg>
+        <!-- Cảnh B/C: logo + chữ -->
+        <svg id="wm-lock" viewBox="0 0 800 240">
+          <g transform="translate(0 20)">
+            <!-- viền ngoài/trong của vòng, để "vẽ nét" -->
+            <g id="wm-outline" fill="none" stroke="#cfd8ff" stroke-width="2">
+              <circle cx="100" cy="100" r="87" stroke-dasharray="547 600" stroke-dashoffset="547" transform="rotate(-10 100 100)" />
+              <circle cx="100" cy="100" r="53" stroke-dasharray="333 400" stroke-dashoffset="333" transform="rotate(-10 100 100)" />
+              <circle cx="149.5" cy="50.5" r="17" stroke-dasharray="107" stroke-dashoffset="107" />
+            </g>
+            <g id="wm-solid" opacity="0">
+              <circle id="wm-s-ring" cx="100" cy="100" r="70" fill="none" stroke="#ffffff" stroke-width="34" stroke-dasharray="354.3 85.5" transform="rotate(-10 100 100)" />
+              <circle id="wm-s-dot" cx="149.5" cy="50.5" r="17" fill="#ffffff" />
+            </g>
+          </g>
+          <text id="wm-text" class="wm-word" x="232" y="190" fill="#ffffff" fill-opacity="0" stroke="#cfd8ff" stroke-width="2" stroke-dasharray="1400" stroke-dashoffset="1400" data-var-text="brand">nova</text>
+          <polygon id="wm-cur1" points="0,0 0,22 15,15" fill="#4d8dff" />
+          <polygon id="wm-cur2" points="0,0 0,22 15,15" fill="#9bbcff" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const B = 60 / 115;
+      const tl = gsap.timeline({ paused: true });
+      const TB = 1.0667; // cắt sang nền tối (phách 10)
+      const TC = 5.2333; // cắt sang nền trắng (phách 18)
+
+      // A · nền trắng, logo đổi xanh → xanh đậm
+      tl.to("#wm-big-ring", { attr: { stroke: "#0b1a3a" }, duration: 0.6, ease: "power2.inOut" }, 0.2);
+
+      // B · nền tối, vẽ nét logo rồi chữ
+      tl.set("#wm-dark, #wm-lock", { opacity: 1 }, TB);
+      tl.set("#wm-big", { opacity: 0 }, TB);
+      tl.to("#wm-outline circle", { attr: { "stroke-dashoffset": 0 }, duration: 0.7, ease: "power2.inOut", stagger: 0.1 }, TB + 0.1);
+      tl.to("#wm-text", { attr: { "stroke-dashoffset": 0 }, duration: 2.1, ease: "power1.inOut" }, TB + 0.5);
+      tl.fromTo("#wm-cur1", { x: 240, y: 80 }, { x: 760, y: 120, duration: 2.1, ease: "power1.inOut" }, TB + 0.5);
+      tl.fromTo("#wm-cur2", { x: 300, y: 196 }, { x: 700, y: 60, duration: 2.1, ease: "power1.inOut" }, TB + 0.5);
+      // đổ đặc trên phách 16 (≈ TB + 3,13 s)
+      const TF = 8.3478 - 4.1667;
+      tl.to("#wm-cur1, #wm-cur2", { opacity: 0, duration: 0.1 }, TF - 0.1);
+      tl.to("#wm-text", { attr: { "fill-opacity": 1, "stroke-width": 0 }, duration: 0.2, ease: "power2.out" }, TF);
+      tl.to("#wm-solid", { opacity: 1, duration: 0.2 }, TF);
+      tl.to("#wm-outline", { opacity: 0, duration: 0.2 }, TF);
+      // thu nhỏ lockup, đổi xanh
+      tl.to("#wm-lock", { scale: 0.55, duration: 0.5, ease: "expo.out" }, TF + 0.3);
+      tl.to("#wm-text, #wm-s-dot", { attr: { fill: "#4d8dff" }, duration: 0.3 }, TF + 0.5);
+      tl.to("#wm-s-ring", { attr: { stroke: "#4d8dff" }, duration: 0.3 }, TF + 0.5);
+
+      // C · nền trắng, lockup xanh đậm + chấm xanh
+      tl.set("#wm-dark", { opacity: 0 }, TC);
+      tl.set("#wm-text", { attr: { fill: "#0b1a3a" } }, TC);
+      tl.set("#wm-s-ring", { attr: { stroke: "#0b1a3a" } }, TC);
+      tl.set("#wm-s-dot", { attr: { fill: "#3b7bff" } }, TC);
+      tl.set("#wm-lock", { scale: 0.58 }, TC);
+      tl.to({}, { duration: 0.01 }, 6.25);
+      window.__timelines["wordmark"] = tl;
+    })();
+  </script>
+</template>
+</html>

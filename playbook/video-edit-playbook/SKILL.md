@@ -21,6 +21,7 @@ Kinh nghiệm **đã kiểm chứng trên sản phẩm thật**, không phải l
 | Video ngắn có lời đọc (reel sản phẩm, giải thích, chuỗi nhiều video) | brief → kịch bản → TTS từng câu → khuôn HyperFrames dùng biến → kiểm → preview → render → kiểm file giao → upload | 01, 02, 03, 04, 05, 06, 07, 08 |
 | Phim ngắn nhân vật bằng AI | kịch bản 7 clip × 10 s → kinh thánh nhân vật → khung đầu/cuối → (hỏi tín dụng) → sinh clip → kiểm clip → cắt/che/thay màn → dựng chữ → mix → đóng dấu | 09, 05, 08, 12 |
 | Footage quay thật / quay màn hình | kiểm HDR, xoay, fps → chuẩn hoá → cắt theo transcript, cắt giữa cụm, afade 30 ms → room tone | 06 §9, 12 §7, 03 §3 |
+| Bản quay người nói vào camera (nhiều lần nói lại) | ghi lời từng đoạn VAD → chọn take theo mốc từ → mốc clip theo lưới khung → chữ quanh mặt → tờ duyệt khung | 06 §10, 07 §9, 01 §8 |
 | Video cắt theo beat nhạc | lưới beat theo dải kick, kiểm pha | 05 §7, skill `music-to-video` |
 | Chỉ cần lệnh ffmpeg | | 12 |
 
@@ -65,6 +66,10 @@ Kinh nghiệm **đã kiểm chứng trên sản phẩm thật**, không phải l
 26. three.js: thời gian chỉ từ timeline (`mixer.setTime(t)`), `setPixelRatio(1)`, `preserveDrawingBuffer: true`; sửa mã dùng chung thì so khung trước/sau.
 27. Không cài skill bắt in quảng cáo hoặc gọi dịch vụ trả phí ngầm; mượn ý chỉ lấy tên, con số, cách kiểm.
 
+**Footage quay thật** (thêm 10/11/2026, từ ghost-editor)
+28. Mốc clip footage = số khung / fps **cắt bớt** ở 6 chữ số (`0.066666`, không `0.067`); cắt hình và tiếng ở cùng mốc đã đưa về lưới khung (07 §9).
+29. Nền footage phủ tới hết reel (giữ khung cuối cho đuôi nhạc); kiểm 0,4 s cuối không đen (06 §9).
+
 ## 4. Bảng số tra nhanh
 
 | Mục | Số |
@@ -81,6 +86,8 @@ Kinh nghiệm **đã kiểm chứng trên sản phẩm thật**, không phải l
 | Giữ để đọc | ≥ max(1,5 s, ký tự/15 + 1,5 s); CTA ≥ 2 s (an toàn 3 s) |
 | Phụ đề | 0,35–2,2 s, ≤ 6 từ / 8 âm tiết, ≥ 50 px; hiện sớm 0,08 s |
 | SFX | ≤ 1/2,2 s; căng ≤ 1/7 s; master SFX −4 dB; pop −10…−16, whoosh −9…−12, riser −16, sting −11, impact hook −16 (+ hook-cao +1) |
+| SFX so với đỉnh giọng p95 (đo trên bản chỉ SFX, chưa A/B) | UI −14 · whoosh −12 · impact −8 dB (05 §11) |
+| Cắt take (bản quay thật) | `a` = từ đầu − 0,10…0,15 s · `b` = từ cuối + 0,20…0,30 s · giữ ngừng < 0,5 s · che liếc > 0,5 s hoặc > 12° |
 | Nhạc | −11 dB + sidechain ratio 6 (reel) · −29…−30 LUFS/đoạn, ratio 5 (phim có thoại) |
 | Loudness giao | −14 LUFS, TP ≤ −1 dBTP (khuôn đặt −1,5); cân từng câu chênh ≤ 1,5 LU; CTA không thấp hơn lời > 3 dB |
 | Xuất | H.264 High, yuv420p, tv, bt709, AAC 192k 48 kHz, `+faststart` |
@@ -91,13 +98,13 @@ Kinh nghiệm **đã kiểm chứng trên sản phẩm thật**, không phải l
 
 | File | Nội dung |
 |---|---|
-| `01-quy-trinh-va-duyet.md` | quy trình 7 bước, điểm duyệt, brief, mổ xẻ video mẫu, vòng tự sửa, agent phê bình, phiên bản, tiết kiệm |
+| `01-quy-trinh-va-duyet.md` | quy trình 7 bước, điểm duyệt, brief, mổ xẻ video mẫu, vòng tự sửa, agent phê bình, phiên bản, tiết kiệm, tờ duyệt khung tự động (§8) |
 | `02-kich-ban-va-hook.md` | luật nội dung, 10 nguyên tắc giữ chân, cổng 3 giây, vòng mở, mẫu cấu trúc, tốc độ đọc, checklist |
 | `03-giong-doc-phu-de.md` | TTS từng câu (VieNeu), đo WAV, khoảng ngừng, ASR, phụ đề karaoke, neo hình vào lời |
 | `04-chuyen-dong.md` | bảng số chuyển động, CustomEase, nhịp, chuyển cảnh, nhịp UI, công thức hiệu ứng, plugin GSAP, cấm, chống "vẻ AI" |
-| `05-am-thanh-sfx.md` | đường cong năng lượng, trần SFX, ánh xạ hành động → tiếng, canh đỉnh/attack, mức trộn, master, beat, kiểm, giấy phép |
-| `06-bo-cuc-dinh-dang.md` | khổ, vùng an toàn, cỡ chữ, khung 0, màu, màn hình mô phỏng, font tiếng Việt, xuất, video thật |
-| `07-hyperframes-khuon-bay.md` | kiến trúc khuôn dùng biến, hợp đồng tất định, âm trong khuôn, bộ kiểm font, three.js, **bảng ~40 bẫy**, kho ý tưởng 13 khuôn, CLI |
+| `05-am-thanh-sfx.md` | đường cong năng lượng, trần SFX, ánh xạ hành động → tiếng, canh đỉnh/attack, mức trộn, master, beat, kiểm, giấy phép, đo SFX so với giọng (§11) |
+| `06-bo-cuc-dinh-dang.md` | khổ, vùng an toàn, cỡ chữ, khung 0, màu, màn hình mô phỏng, font tiếng Việt, xuất, video thật, chọn take bản quay người nói (§10) |
+| `07-hyperframes-khuon-bay.md` | kiến trúc khuôn dùng biến, hợp đồng tất định, âm trong khuôn, bộ kiểm font, three.js, **bảng ~40 bẫy**, kho ý tưởng 13 khuôn, CLI, mốc clip theo lưới khung (§9) |
 | `08-kiem-tra-qa.md` | thứ tự kiểm, ngưỡng, kiểm hình/âm, agent phê bình, luật cho công cụ kiểm, mẫu báo cáo |
 | `09-phim-ai-hau-ky.md` | phim AI end-to-end: prompt Flow/Omni, bộ lọc nội dung, kiểm clip, bảng lỗi clip, cắt/che/thay màn xanh, mix, chèn video giải pháp |
 | `10-nguon-da-hoc.md` | ~40 repo/công cụ đã xem: giấy phép, dùng/bỏ, lý do — tra trước khi nghiên cứu nguồn mới |

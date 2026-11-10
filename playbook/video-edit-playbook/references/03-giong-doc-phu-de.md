@@ -54,6 +54,23 @@ Dòng thời gian: bắt đầu ở `bat_dau` (~0,35 s, để khung 0 đã có c
 - **In từ chèn thêm/thay thế** (đoạn `insert`/`replace` mức từ của difflib) cho mọi câu, kể cả câu đạt: một từ thừa (TTS đọc "…" thành "chấm", "/" thành "xuyệt", "%") chỉ hạ ratio vài phần trăm nên lọt ngưỡng 0,92. Đã làm ở FiSoft ngày 02/11/2026, in `+chèn ~thay -thiếu`. Bỏ qua chỗ chỉ khác khoảng trắng ("Fi Soft" = "FiSoft"). Nếu chèn hoặc thay ra tên dấu câu (chấm, phẩy, gạch, xuyệt, ngoặc, dấu) mà kịch bản không có, câu nhận nhãn `DẤU` và tính là lệch. Chỉ xét những từ được chèn nên "chấm công" trong kịch bản không bị báo nhầm. Ca đối chứng: bỏ một chữ khỏi kịch bản trong khi WAV vẫn đọc chữ đó.
 - ASR chép đúng một từ bị cắt cụt là chuyện thường → kiểm "từ nguyên vẹn" phải nhìn dạng sóng/strip tại mốc cắt.
 
+**ASR trên footage dài, clip có nhạc, lời thật** (EditAtlas `transcribe`, đo 08/11/2026 với faster-whisper 1.2.1, int8, CPU). Thiết lập ở trên dành cho **WAV TTS từng câu, sạch, có đệm lặng**. Với file dài, có nhạc nền hoặc người thật nói, dùng thiết lập dưới đây:
+
+| Thiết lập | Giá trị | Lý do đo được |
+|---|---|---|
+| VAD | **bật, `min_silence_duration_ms=500`** | Mặc định: turbo bịa "Hãy subscribe cho kênh…" ở cuối (17 % từ sai) · 500 ms: 0 % |
+| Tên riêng trong `initial_prompt` / hotwords | **không** | Có nhạc thì turbo chèn "Cảm ơn các bạn đã theo dõi và hẹn gặp lại" (15 % sai); hotword làm mất dấu câu. Thay bằng cách so tên **sau** khi nhận dạng và gợi ý sửa chỗ viết gần giống |
+| `condition_on_previous_text` | bật cho tiếng Việt (tắt cho tiếng Anh) | Talk thật 5 phút: số dấu kết câu 10 → 60, từ giữ nguyên |
+| Lượt hai | đoạn VAD coi là có giọng mà không ra từ thì nhận dạng riêng lại | Bộ FLEURS tiếng Việt: đã nuốt cả một câu 4 s; sai 11,1 → 9,7 % |
+| `hallucination_silence_threshold` | 2 s | dự phòng cho lặng dài |
+| Model | `large-v3-turbo`; `small` sai ~9–10 % trên tiếng Việt, viết "EditAtlas" thành "Edith Atlas" | turbo trên giọng đọc thật vẫn sai 9,5 %, chủ yếu tên và thuật ngữ nước ngoài |
+
+- Danh sách câu hay bị bịa (subscribe, "cảm ơn đã theo dõi", "Thanks for watching") chỉ để **đánh dấu kiểm**, không xoá ngay, vì outro thật có thể nói đúng câu đó.
+- Ngưỡng tin cậy p < 0,7 chỉ bắt được khoảng 42 % từ sai (nhiều từ sai có p 0,8–0,92, ví dụ "cãi tay đò"). Vẫn phải đọc toàn văn một lượt.
+- Số dài viết thành một từ ("400ms" cho 5 âm tiết) có mốc kết thúc sớm 0,3–0,4 s. Trước khi cắt ở mép từ, kiểm lại bằng mức âm.
+- Cắt lặng khi có nhạc dưới giọng: khoảng ngừng không còn là lặng, và cắt giọng thì cắt luôn nhạc → cắt trước khi thêm nhạc, hoặc trải lại nhạc sau.
+- Phụ đề 9:16: ≤ 32 ký tự/dòng, tối đa 2 dòng. Ngắt ở đầu cụm (dấu câu, chỗ thở, "là", "và", "nhưng") để không tách từ hai âm tiết ("sự / nghiệp"). Lời nói tiếng Việt thường vượt 17 ký tự/giây (69/96 phụ đề của một talk thật), nhưng **không rút gọn lời** để đạt con số đó.
+
 ## 5. Phụ đề
 
 **Dữ liệu:** chia câu thành cụm theo `|`; thời gian mỗi từ chia đều trong `[s0, s1]` theo trọng số âm tiết (từ có dấu phẩy cuối +1,2 đơn vị nghỉ) → `groups[{start, end, words[{text, start, end}]}]`, xuất `captions.json` để công cụ kiểm dùng lại.

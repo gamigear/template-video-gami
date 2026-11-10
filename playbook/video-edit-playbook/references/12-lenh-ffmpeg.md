@@ -189,6 +189,11 @@ ffmpeg -nostdin -y -i iphone.mov -vf "zscale=t=linear:npl=100,format=gbrpf32le,z
 
 # đưa mọi đoạn về cùng fps trước khi nối -c copy (giữ phân số NTSC nếu nguồn là 30000/1001)
 ffmpeg -nostdin -y -i in.mp4 -vf fps=30000/1001 -c:v libx264 -crf 18 -c:a copy cung-fps.mp4
+
+# nền footage phủ tới hết reel: giữ khung cuối thêm 1 s cho đuôi nhạc / thẻ kết (06 §9; không dùng cho B-roll chèn)
+ffmpeg -nostdin -y -i talk.mp4 -an -vf "tpad=stop_mode=clone:stop_duration=1.0" -c:v libx264 -crf 14 -g 30 nen-giu-cuoi.mp4
+# kiểm 0,4 s cuối bản render không đen
+ffmpeg -nostdin -sseof -0.4 -i out.mp4 -vf blackdetect=d=0.03:pic_th=0.98 -an -f null - 2>&1 | grep black_start
 ```
 Cần ffmpeg có `libzimg`: kiểm `ffmpeg -filters | grep zscale` trước. **Bản Homebrew mặc định (9.0.1) trên máy FiSoft không có `zscale`** — chuỗi trên sẽ báo lỗi filter không tồn tại; cần bản ffmpeg build kèm libzimg trước khi xử lý video HDR.
 

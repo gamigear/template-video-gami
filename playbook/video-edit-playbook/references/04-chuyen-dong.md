@@ -15,6 +15,20 @@ Con số mặc định để lệch **có chủ đích**, không lệch vô tìn
 | Giữ để đọc | ≥ 1 s sau khi chữ đứng yên + 0,25 s cho mỗi từ sau từ thứ 3; câu CTA ≥ 2 s (≥ 3 s an toàn hơn) |
 | Linear | chỉ cho chuyển động liên tục (xoay, trôi nền), không cho thứ bắt đầu/dừng |
 
+Đối chiếu đo được (EditAtlas `video-breakdown`, 12 demo motion graphics công khai: logo, tiêu đề, biểu đồ, banner, 10/11/2026):
+
+- Phần tử vào trong 0,3–0,9 s, kiểu "nhanh rồi lắng" (ease-out).
+- Khung giữ **đứng yên hoàn toàn 50–90 % thời lượng shot**.
+- Ra bằng cách **đảo ngược lúc vào**, tăng tốc dần (ease-in). Ví dụ một logo sting: vào 0,7 s, đứng yên 71 %, ra 0,8 s.
+- Các chữ/mảnh cách nhau ~0,15 s. Banner kết bằng đúng khung đầu để chạy vòng.
+
+Con số này khác bảng trên ở hai chỗ:
+
+- **Thời gian ra:** ở đây ≈ thời gian vào, bảng trên lấy ≈ ½.
+- **"Đứng yên":** chỉ hợp logo/banner không có lời. Dưới lời đọc vẫn theo luật "không khung nào đứng yên tuyệt đối" (§2).
+
+Chưa A/B, nên đừng đổi khuôn đã duyệt.
+
 Từ điển ease có thời lượng (Herk): ra `power2.in` 0,2–0,33 s · vào `power2.out` 0,2–0,5 s · quét camera `power2.inOut` 1,2–2,3 s · giữ linear 0,4–0,65 s · thẻ đáp `back.out(1.2–1.5)` 0,3–0,5 s, **một lần mỗi cảnh**. Không dùng `gsap.defaults()` toàn cục.
 
 Đặt ba đường cong thành tên chung bằng CustomEase (một lần ở root):

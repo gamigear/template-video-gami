@@ -68,4 +68,20 @@ Facebook/Instagram lấy khung đầu làm ảnh bìa khi tự phát không ti�
 - Hướng đọc từ `stream_side_data=rotation`, không tin tag `rotate`.
 - Mọi đoạn cùng fps (`avg_frame_rate`, giữ phân số `30000/1001`) trước khi nối `-c copy`.
 - Clip MP4 nằm trong composition: hiện **ảnh khung đầu** cho tới khi video chạy và **ảnh khung cuối** từ lúc video hết, để không lộ khung đen/trống.
+- **Nền footage phải phủ tới hết reel**, kể cả đuôi nhạc hay thẻ kết: clip người nói hết đúng lúc hết giọng thì 0,3–0,5 s đuôi bị đen, chớp ở điểm Reels/TikTok phát lặp. Giữ khung cuối của nền bằng `tpad=stop_mode=clone:stop_duration=<giây>`, và kiểm 0,4 s cuối mọi bản render (ghost-editor, 11/2026). **Không** giữ khung cuối cho B-roll chèn giữa: ghost-editor từng làm một cảnh quán cà phê đứng hình 1,4 s; cắt ngắn đoạn chèn thay vì kéo dài.
 - Lệnh: `12-lenh-ffmpeg.md` §7.
+
+## 10. Chọn take và cắt bản quay người nói (từ ghost-editor, 11/2026)
+
+Dùng khi có **bản quay thật người nói vào camera**, quay đi quay lại nhiều lần. Video TTS không cần phần này.
+
+1. Ghi lời **cả bản quay**, lấy mốc từng từ. Whisper trên toàn file hay gộp câu nói lại vào một câu sạch, nên tách đoạn có tiếng bằng VAD (silero, khoảng ngừng tối thiểu 0,3 s) rồi ghi lời từng đoạn riêng. Máy M1 dùng `mlx-whisper` (`mlx-community/whisper-large-v3-turbo`).
+2. Đánh số câu kịch bản; gắn mỗi đoạn với câu nó nói lại, `x` cho đoạn hỏng hoặc câu "rồi, lại nhé".
+3. Mỗi câu chọn một take: đúng ý (không cần đúng chữ), trôi chảy, **ưu tiên take nói sau** vì người nói ấm dần. Nhiều câu nói một hơi thì lấy nguyên cả cụm làm một take: ít cắt hơn, giọng liền hơn.
+4. Mốc cắt theo **mốc từ**, không theo mốc của cả đoạn Whisper: `a` = đầu từ đầu − 0,10…0,15 s; `b` = cuối từ cuối + 0,20…0,30 s, không quá đầu từ kế tiếp. Ngừng trong take < 0,5 s thì giữ (nhịp nói); > 1 s thì cắt.
+5. Nhìn đi chỗ khác: chỉ che khi > 0,5 s hoặc đầu quay > 12°. Chớp mắt và liếc nhanh giữ nguyên. Cách che theo thứ tự rẻ trước: cắt bớt → đổi cỡ cảnh (wide/tight từ một máy 4K) → giữ đồ hoạ đang có → chèn trong khung → chèn toàn màn hình. Một reel từng che hết 31 lần liếc, khiến người nói chỉ còn trên hình 33 %.
+6. Che vết cắt nhảy bằng mờ chéo 0,2 s hoặc đổi cỡ cảnh, không zoom ở mọi mốc cắt (tối đa 3 lần zoom mạnh mỗi reel).
+7. Đặt chữ, thẻ và phụ đề quanh mặt: theo dõi mặt (YuNet/MediaPipe), ưu tiên dưới cằm, không đủ chỗ thì lên trên đầu, không đủ nữa thì thu nhỏ. Không đè lên mặt.
+8. Mức tham chiếu (6 reel top, đo bởi ghost-editor): 113/119 chuyển cảnh là cắt thẳng; mỗi cảnh trung vị khoảng 3 s; B-roll 20–35 % thời lượng; mặt người nói ≥ 65 % thời lượng; ≤ 3 lần chèn mỗi phút.
+
+Mã tham chiếu: kurbaitaev/ghost-editor (MIT), `references/take-selection.md`, `scripts/{vad_pauses,islands_tx,takes,plan_cut,face_track}.py`. Đã chạy thử 10/11/2026 trên clip không phải talking-head; **chưa thử bước chọn take trên bản quay thật**.

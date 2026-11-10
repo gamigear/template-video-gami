@@ -17,6 +17,19 @@ Mục tiêu: "đã tai, đã mắt" để giữ chân, nhưng **không lạm d�
 | Tiếng căng (alert, sting chói, drone, tiếng cao gắt) | **≤ 1 / 7 s**, đếm riêng ngoài trần trên. Đoạn kể khổ hay dồn alert: đếm trước khi build |
 | Chuyển cảnh lớn | 1 mỗi lần đổi cảnh, không lặp cùng file hai lần liền |
 
+Trần ở trên dành cho reel **có lời đọc**: 1 tiếng / 2,2 s ≈ 4,5 tiếng / 10 s. Bảng nhịp theo loại phim của EditAtlas `sound-design` (số đo của Clipwing real-sfx trên 9 reel SFX đã hoàn thiện, **chưa A/B trên khuôn FiSoft**):
+
+| Loại phim | Tiếng / 10 s | Khe dài nhất |
+|---|---|---|
+| Chỉ có SFX (không lời, không nhạc) | 7–15, trung vị ~11; khe trung vị ~0,7 s | ~2,5 s, báo lỗi khi > 3 s; có tiếng trong 2 s đầu |
+| Có nhạc riêng | 3–12 | ≤ 5 s |
+| Giọng dẫn | 1,5–8 (một talking-head được duyệt bằng tai: 2,6) | ≤ 8 s |
+
+- Các tiếng cách nhau < 80 ms tính là một cử chỉ (một mốc nhiều lớp). Mốc lớn tối đa 3 lớp (hit + đuôi whoosh + mảnh vụn), không thay bằng một file thật to.
+- Hit nặng chiếm ≤ ~1/3 số cử chỉ. Một file không dùng quá 2 lần: dùng các take đánh số của cùng họ tiếng. Tiếng UI giữ một họ cho cả phim.
+- Vật thật trên hình (ly, đá, giấy) dùng foley thật, không dùng pop UI (pop trên vật thật nghe như hoạt hình).
+- Bed ambience cho phim **chỉ SFX**: một tiếng nền tối, đều, ở trung vị **−54 dBFS**. Nghe thử: −56…−50 "vừa", ≥ −44 "quá to", không có bed thì "trống". Không bao giờ đặt bed dưới giọng hay nhạc.
+
 ## 3. Gắn tiếng vào hành động trên hình (không rải ngẫu nhiên)
 
 | Trên hình | Tiếng |
@@ -94,6 +107,7 @@ Một bộ khuôn đã duyệt dùng: master SFX −4 dB, pop −10…−16, who
 3. Mỗi SFX đã thêm **thật sự nghe được**: đo RMS/dải tần cửa sổ quanh cue so với nền (vd hook-cao: dải 2–8 kHz ở 0,05–0,35 s phải nhảy rõ, như −59 → −26 dB).
 4. Bảng RMS theo cảnh.
 5. Báo cáo ghi rõ "chỉ đo, chưa nghe" + **5 mốc giao người nghe bằng tai nghe**: hook, riser → sting, tiếng to nhất, cụm SFX dày nhất, CTA.
+6. **Sync đo thật** (EditAtlas `sound-design` `check.py`): trên bản render chỉ có SFX (§11), tìm lại từng tiếng bằng tương quan chéo với dạng sóng file gốc của nó. Lấy vị trí thật trừ mốc khung dự định; **lệch > 1 khung (33 ms ở 30 fps) là lỗi cue**. Cách này kiểm được cả bảng bù đỉnh/attack ở §4 sau khi đã render. Thêm vào cùng lượt: số cử chỉ / 10 s và khe dài nhất (bảng §2), file lặp > 2 lần, mono fold-down. Ghép các mốc cần nghe thành một `listen.wav` để giao người nghe.
 
 Khi thử thay tiếng: trộn lại âm trên hình cũ (không render lại hình) thành bản A (đối chứng trộn lại) / B / C, đo cùng bảng, đưa người dùng nghe chọn. Bản A phải khớp âm đã giao trước khi tin so sánh (FiSoft 11/2026: −29 dB, mức nhiễu AAC). **Bẫy:** HyperFrames/Chrome đưa giọng mono ra stereo ở mức nguyên vẹn, còn `aformat=channel_layouts=stereo` của ffmpeg hạ −3 dB mỗi kênh → giọng trong bản trộn lại nhỏ hơn 3 dB, A lệch còn −17 dB; dùng `pan=stereo|c0=c0|c1=c0` cho giọng mono.
 
@@ -101,10 +115,20 @@ Khi thử thay tiếng: trộn lại âm trên hình cũ (không render lại h�
 
 - **Một bộ SFX chung cho cả chuỗi** để giữ nhận diện. Hỏi người dùng nguồn trước khi lấy.
 - **Được phép:** Mister Horse Free (dùng thương mại; giấy phép 1 người, cấm phát tán lại → **tự tải bằng tài khoản của mình**, không dùng bản người khác chép lên Drive), 効果音ラボ soundeffect-lab.info (miễn phí thương mại, cấm phát tán lại; rất hợp UI: con trỏ, nút xác nhận, hiện tiêu đề), thư viện HeyGen qua `/media-use resolve --type sfx|bgm`, Kenney/Freesound **CC0** (phân phối lại được), Mixkit Free (không phân phối lại).
-- **Cấm:** tiếng meme (game, phim, Windows, Mario, Minecraft…), file Epidemic `ES_…` / Storyblocks `…-SBA-…` khi chưa có gói, gói "Anime SFX" không rõ nguồn (chỉ nghe tham khảo chất tiếng rồi tìm bản có giấy phép).
+- **Cấm:** tiếng meme (game, phim, Windows, Mario, Minecraft…), file Epidemic `ES_…` / Storyblocks `…-SBA-…` khi chưa có gói, gói "Anime SFX" không rõ nguồn (chỉ nghe tham khảo chất tiếng rồi tìm bản có giấy phép), thư viện **EditAtlas/sfx** (không có giấy phép, không ghi nguồn từng file; xem `10-nguon-da-hoc.md` §3).
 - Ghi nguồn mỗi file vào manifest/`CREDITS.txt`; nhạc không rõ nguồn → ghi "LICENCE NOT CONFIRMED", không dùng.
 - Mỗi file trong bộ: đo thời lượng, attack, đỉnh, RMS, tần số trọng tâm, tỉ lệ năng lượng > 2 kHz; đặt tên theo chức năng (`hook-cao`, `pop`, `chon`, `chuyen-canh`, `lo-dien`, `cang`…); đỉnh ≤ −1 dBFS; cắt lặng đầu file.
 
 ## 10. Lệnh trộn
 
 Đồ thị ffmpeg mẫu (đặt cue, sidechain, vá treo `amix`) và lệnh đo: xem `12-lenh-ffmpeg.md` §3–§4 và `07-hyperframes-khuon-bay.md` §3.
+
+## 11. Đo SFX so với giọng trên một bản tách riêng SFX (từ ghost-editor, 11/2026)
+
+Bảng §5 đặt mức SFX so với impact. Phần này **thêm một bước đo**, không thay bảng §5.
+
+- Đo đỉnh giọng (p95 của đỉnh từng khối, dBFS) trên WAV giọng đã cân. Render thêm một bản **chỉ có SFX** (tắt giọng và nhạc), rồi đo đỉnh từng tiếng và so với đỉnh giọng.
+- Mức đích của ghost-editor (đỉnh SFX so với p95 đỉnh giọng): UI/pop −14 dB, whoosh −12, impact −8, meme −3. To hơn giọng là lỗi; không nghe được cũng là lỗi.
+- Lợi ích: mức SFX bám theo **giọng thật của từng video** (VieNeu, giọng nam/nữ khác nhau), không theo số gõ tay. Sửa bằng cách đổi gain của file SFX (§5), không tăng âm lượng bản mix cuối.
+- Lần chạy thử (10/11/2026, clip Douyin có nhạc nền): whoosh đo được −8,6 dB, impact −5,2 dB so với giọng, cao hơn đích khoảng 3 dB nhưng vẫn qua ngưỡng QA của tool.
+- Trạng thái: **chưa A/B trên khuôn FiSoft hay Đào Lửa**. Muốn áp thì đo 3 reel đã duyệt trước, so với các mức này rồi mới chốt ngưỡng.

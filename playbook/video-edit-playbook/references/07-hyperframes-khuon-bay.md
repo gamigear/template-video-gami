@@ -157,3 +157,15 @@ npx hyperframes beats <nhạc>                      # lưới beat nhanh (đối
 Ứng viên registry đã dùng/đáng thử: `whip-pan-cut`, `flash-through-white`, `light-leak`, `cinematic-zoom`, `iris-reveal`, `text-match-cut`, `caption-kinetic-slam`, `sheet-spring-up`, `parallax-device-dive`, `grid-pixelate-wipe`, `glitch` (rất tiết chế).
 
 **Ghim cả lúc render (Calokid, 11/2026):** gọi `npx hyperframes …` không ghi phiên bản thì npx có thể tự nâng bản giữa hai lệnh (check chạy 0.9.12, render đã thành 0.9.13). Luôn gọi `npx hyperframes@<x.y.z>` cho check, snapshot và render. Nếu bản đã nhảy, chạy lại `check` bằng đúng bản sẽ render, rồi xem khung trích từ file render.
+
+## 9. Mốc clip footage theo lưới khung hình (từ ghost-editor, 11/2026)
+
+Áp cho mọi `<video>`/`<audio>` cắt từ footage hoặc clip AI (take, khung giữ, matte, chuyển cảnh).
+
+- `data-start`, `data-duration` = **số khung / fps, cắt bớt (floor) ở 6 chữ số thập phân**, không làm tròn: 2 khung @30 = `0.066666`.
+  - `0.067` làm clip hiện trễ một khung. `0.066667` làm lặp khung đầu. Lý do: trình render chỉ bắt mốc bắt đầu khi lệch dưới 0,001 khung, và lấy khung video theo floor((t − start) × fps).
+  - Hàm của ghost-editor (`scripts/build.mjs`): `const fgrid = (frames) => (Math.floor((frames / FPS) * 1e6) / 1e6).toFixed(6);`. Tính mốc bằng **số khung nguyên** trước rồi mới đổi ra giây.
+- Cắt hình và tiếng riêng (ffmpeg rồi mới đưa vào khuôn): đưa mọi đoạn về lưới khung trước, cắt **cả hình lẫn tiếng ở cùng mốc đã làm tròn**. Nếu mỗi đoạn tự làm tròn thì giọng trôi sớm dần: ghost-editor đo được 43–54 ms sau 23 đoạn.
+- Cắt ffmpeg để khớp mốc trên: `-ss` = thời điểm khung chính xác 6 chữ số, `-t` ngắn hơn nửa khung.
+- Kiểm: số khung hình = số khung tiếng (lệch 0), như ở `08-kiem-tra-qa.md` §1.
+- Trạng thái: luật lấy từ repo ngoài, **chưa thử trên khuôn FiSoft**. Khuôn chỉ có đồ hoạ + TTS thì không cần.

@@ -35,6 +35,12 @@ Mổ xẻ bằng số (khi người dùng có file mẫu; không tải reel củ
 
 Lượt dò cắt rẻ hơn, không cần thư viện (hypit): `ffmpeg -vf fps=12,scale=32:32,format=rgb24 -f rawvideo -`, điểm = trung bình |chênh| ÷ 255 giữa hai khung liền nhau, ≥ 0,1 là **ứng viên** cắt (không phải nhãn biên tập), thêm sàn 0,5 s. Ghi chép thành `ANALYSIS.md` (cả bài) + `TIMELINE.md` (mỗi đoạn "giây nguồn · vai trò", ví dụ "6,07–8,27 · việc dồn lên"). Luật **giữ vai trò, làm lại hình thức**; điều người dùng không nhắc thì giữ như mẫu.
 
+Công cụ mổ xẻ đầy đủ hơn, chạy offline (EditAtlas `video-breakdown`, Apache-2.0, chỉ cần numpy + Pillow + ffmpeg): `python3 <skill>/scripts/analyze.py reel.mp4 --out work/bd` → `breakdown.json` + ảnh `overview`/`shots_NN`/`joins_NN`/`events`. Nó đo loại mối nối (cut, dissolve, dip, flash, wipe kèm hướng, shape wipe, push, zoom, punch-in), camera (crash zoom ≥ 1,25 lần trong 0,3 s, rung ≥ 0,25 % bề ngang), timing in/giữ/ra của shot tĩnh, sự kiện chữ theo dải ngang, LUFS, tempo và cắt có theo beat không. `frames.py --at T --span 0.6 --step 0.04` lấy từng khung quanh một mối nối. `text_look.py --crop … --text "…"` đo màu chữ (gradient kèm mã hex, viền, glow, độ nghiêng) và gợi ý font Google gần giống. Clone vào thư mục riêng; chạy `python3` thường, vì `-I` bỏ qua numpy cài ở user site.
+
+- Tác giả đo trên demo có đáp án: tìm đúng 23/24 mối nối, đúng loại 17/24; chớp sáng, nhấp nháy, phim cũ đếm thừa mối nối (14 so với 5 thật).
+- Chạy thử 10/11/2026 trên reel quay màn hình CapCut (`research/reel_2054401788599994`, 25,6 s): mất 26 s, ra 22 shot. Đổi màu chữ trong ô preview nhỏ bị gán nhãn `jump cut` / `cross-dissolve` / `gradual`, nhưng đó không phải mối nối.
+- → **Số chỉ là ứng viên, khung hình mới là bằng chứng**: mở `joins_NN.png` trước khi ghi tên chuyển cảnh nào; với reel tutorial quay màn hình, bỏ qua nhãn mối nối.
+
 **Hồ sơ "khẩu vị" khi mở khuôn mới** (ghi đầu HUONG-DAN của khuôn): một câu "design read" cụ thể (không phải "hiện đại, chuyên nghiệp"); ba núm 1–10: độ đa dạng hình, cường độ chuyển động, mật độ thông tin. Phép thử: đổi tiêu đề mà video thành chủ đề khác được → còn chung chung.
 
 ## 3. Khuôn mẫu, không dựng từ đầu
@@ -74,3 +80,13 @@ Khi phải làm nhiều video cùng loại (chuỗi sản phẩm, series):
 - Thử âm thanh: trộn lại âm trên hình đã render (không render lại hình).
 - Phim AI: thử rẻ bằng khung tĩnh trước khi tốn tín dụng clip; đo số lần tạo trung bình/clip trên bản thử 6–7 clip trước khi làm tập dài.
 - Việc tốn tín dụng/tiền (sinh clip, ảnh trả phí, nhạc trả phí): **hỏi trước**, không tự bấm.
+
+## 8. Tờ duyệt khung tự động trước khi render (từ ghost-editor, 11/2026)
+
+Điểm duyệt [5] (preview) rẻ hơn nữa nếu người duyệt xem **một trang HTML** trước khi tốn công render:
+
+- Chụp `hyperframes snapshot` ở: khung 0, 1,5 s, **ngay sau mỗi mốc cắt**, mỗi điểm nhấn lúc vừa vào và lúc đã đứng yên, khung cuối. Gom vào một trang có kèm timeline, lời theo cảnh, bảng SFX (mốc, tiếng, mức, lý do) và cảnh báo lint.
+- Agent xem trang đó trước, sửa chỗ sai (chữ đè cằm, rớt dòng, thẻ chồng phụ đề), rồi mới gửi người duyệt.
+- Người duyệt đồng ý thì mới render preview (720×1280, khoảng 4,5 Mbit/s, xem trên điện thoại). Đồng ý preview thì mới render bản cuối.
+- Mã tham chiếu: `scripts/approval_sheet.py` của kurbaitaev/ghost-editor (MIT). Ảnh được nhúng base64 vào một file HTML khoảng 1 MB, nên gửi cho người duyệt được.
+- Áp vào khuôn: có thể viết một bản nhỏ đọc danh sách cảnh trong JSON nội dung. Mốc cảnh của khuôn đã có sẵn, nên không cần phát hiện điểm cắt.

@@ -1,0 +1,281 @@
+<html
+  data-composition-variables='[
+    {"id":"s1a","type":"string","label":"Trạm 1 · dòng 1","default":"Thiết kế"},
+    {"id":"s1b","type":"string","label":"Trạm 1 · dòng 2","default":"Thương hiệu"},
+    {"id":"s2a","type":"string","label":"Trạm 2 · dòng 1","default":"Đồ hoạ"},
+    {"id":"s2b","type":"string","label":"Trạm 2 · dòng 2","default":"Chuyển động"},
+    {"id":"s3a","type":"string","label":"Trạm 3 · dòng 1","default":"Video"},
+    {"id":"s3b","type":"string","label":"Trạm 3 · dòng 2","default":"Quảng cáo"},
+    {"id":"s4a","type":"string","label":"Trạm 4 · dòng 1","default":"Logo"},
+    {"id":"s4b","type":"string","label":"Trạm 4 · dòng 2","default":"Hoạt hình"},
+    {"id":"brand","type":"string","label":"Tên thương hiệu","default":"Studio."},
+    {"id":"accent","type":"color","label":"Màu nhấn","default":"#A8283A"}
+  ]'
+>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      overflow: hidden;
+    }
+    /* Quầng sáng quanh chùm (đa giác mờ) */
+    #sp-glow,
+    #sp-glow2 {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 1920px;
+    }
+    #sp-glow {
+      filter: blur(30px);
+      opacity: 0.85;
+    }
+    #sp-glow2 {
+      filter: blur(70px);
+      opacity: 0.4;
+    }
+    /* Lớp "được rọi": nền + chữ cố định, chỉ hiện trong chùm sáng */
+    #sp-lit {
+      position: absolute;
+      inset: 0;
+      background: #e6e7ec;
+      /* Mép mềm: giao của hai nửa mặt phẳng gradient (tính trong render) */
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+      overflow: hidden;
+    }
+    .sp-ball {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 34% 30%, #f6f7f9 0%, #e1e2e8 45%, #cfd0da 78%, #c4c5d1 100%);
+      box-shadow: 0 30px 80px rgba(120, 120, 150, 0.25);
+    }
+    #sp-hot {
+      position: absolute;
+      inset: 0;
+    }
+    .sp-tg {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+    }
+    .sp-in {
+      display: block;
+    }
+    .sp-a {
+      display: block;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 800;
+      font-size: 100px;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: #0b0b0c;
+      margin-bottom: 0.16em;
+    }
+    .sp-b {
+      display: block;
+      font-family: "Space Mono", monospace;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 86px;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      color: var(--accent, #a8283a);
+      padding-left: 0.5em;
+    }
+    #sp-logo .sp-in {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    #sp-mark {
+      width: 156px;
+      height: 156px;
+      border-radius: 28px;
+      background: #0b0b0c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #sp-brand {
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 800;
+      font-size: 112px;
+      letter-spacing: -0.05em;
+      color: #0b0b0c;
+    }
+    /* Đèn: gốc toạ độ = đỉnh chùm sáng, trục +x = hướng rọi */
+    #sp-lamp {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+    }
+    #sp-body,
+    #sp-lens {
+      position: absolute;
+      background: #fff;
+      box-shadow:
+        0 0 10px #fff,
+        0 0 28px rgba(255, 255, 255, 0.85),
+        0 0 70px rgba(255, 255, 255, 0.45);
+    }
+    #sp-body {
+      left: -98px;
+      top: -54px;
+      width: 66px;
+      height: 108px;
+      border-radius: 16px;
+    }
+    #sp-lens {
+      left: -24px;
+      top: -42px;
+      width: 36px;
+      height: 84px;
+      border-radius: 0 42px 42px 0 / 0 42px 42px 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="spotlight" data-width="1080" data-height="1920">
+    <svg id="sp-glow2" viewBox="0 0 1080 1920" data-layout-ignore>
+      <polygon id="sp-glow2-poly" points="0,0 0,0 0,0" fill="#ffffff" />
+    </svg>
+    <svg id="sp-glow" viewBox="0 0 1080 1920" data-layout-ignore>
+      <polygon id="sp-glow-poly" points="0,0 0,0 0,0" fill="#ffffff" />
+    </svg>
+
+    <div id="sp-lit" data-layout-allow-overflow>
+      <div class="sp-ball" id="sp-ball1" style="left: -180px; top: 120px; width: 620px; height: 620px"></div>
+      <div class="sp-ball" id="sp-ball2" style="left: 560px; top: 280px; width: 700px; height: 700px"></div>
+      <div class="sp-ball" id="sp-ball3" style="left: 80px; top: 820px; width: 560px; height: 560px"></div>
+      <div class="sp-ball" id="sp-ball4" style="left: 640px; top: 1080px; width: 640px; height: 640px"></div>
+      <div class="sp-ball" id="sp-ball5" style="left: -120px; top: 1440px; width: 600px; height: 600px"></div>
+      <div id="sp-hot"></div>
+
+      <div id="sp-t1" class="sp-tg clip" data-start="1.05" data-duration="1.4" data-track-index="1" style="left: 540px; top: 500px">
+        <div class="sp-in"><span class="sp-a" data-var-text="s1a">Thiết kế</span><span class="sp-b" data-var-text="s1b">Thương hiệu</span></div>
+      </div>
+      <div id="sp-t2" class="sp-tg clip" data-start="2.5" data-duration="1.45" data-track-index="2" style="left: 650px; top: 720px">
+        <div class="sp-in"><span class="sp-a" data-var-text="s2a">Đồ hoạ</span><span class="sp-b" data-var-text="s2b">Chuyển động</span></div>
+      </div>
+      <div id="sp-t3" class="sp-tg clip" data-start="4.0" data-duration="1.45" data-track-index="3" style="left: 440px; top: 1000px">
+        <div class="sp-in"><span class="sp-a" data-var-text="s3a">Video</span><span class="sp-b" data-var-text="s3b">Quảng cáo</span></div>
+      </div>
+      <div id="sp-t4" class="sp-tg clip" data-start="5.5" data-duration="1.45" data-track-index="4" style="left: 640px; top: 1000px">
+        <div class="sp-in"><span class="sp-a" data-var-text="s4a">Logo</span><span class="sp-b" data-var-text="s4b">Hoạt hình</span></div>
+      </div>
+      <div id="sp-logo" class="sp-tg clip" data-start="7.0" data-duration="2.3" data-track-index="5" style="left: 540px; top: 800px">
+        <div class="sp-in">
+          <div id="sp-mark">
+            <svg width="96" height="96" viewBox="0 0 96 96">
+              <rect x="10" y="38" width="16" height="22" rx="4" fill="#fff" />
+              <path d="M30 40 A9 9 0 0 1 30 58 Z" fill="#fff" />
+              <path d="M34 49 L86 24 L86 74 Z" fill="#fff" opacity="0.9" />
+            </svg>
+          </div>
+          <span id="sp-brand" data-var-text="brand">Studio.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="sp-lamp" data-layout-ignore>
+      <div id="sp-body"></div>
+      <div id="sp-lens"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const root = document.querySelector('[data-composition-id="spotlight"]');
+      const $ = (s) => root.querySelector(s);
+      const lit = $("#sp-lit");
+      const hot = $("#sp-hot");
+      const glow = $("#sp-glow-poly");
+      const glow2 = $("#sp-glow2-poly");
+      const W = 1080, H = 1920;
+      const lamp = $("#sp-lamp");
+      const D2R = Math.PI / 180;
+
+      // Trạng thái đèn: vị trí đỉnh chùm, hướng rọi, nửa góc mở, độ dài, độ sáng điểm nóng
+      const S = { x: 540, y: 1250, rot: -90, spread: 0, len: 0, hot: 0, feather: 28 };
+
+      // Nửa mặt phẳng mép mềm: trong suốt phía ngoài đường thẳng qua (vx,vy), đục phía pháp tuyến (nx,ny)
+      function halfPlane(vx, vy, nx, ny, f) {
+        const A = Math.atan2(nx, -ny) / D2R;
+        const L = Math.abs(W * nx) + Math.abs(H * ny);
+        const sx = W / 2 - (nx * L) / 2, sy = H / 2 - (ny * L) / 2;
+        const d = (vx - sx) * nx + (vy - sy) * ny;
+        return `linear-gradient(${A}deg, rgba(0,0,0,0) ${d - f / 2}px, #000 ${d + f / 2}px)`;
+      }
+
+      function render() {
+        const a1 = (S.rot - S.spread) * D2R;
+        const a2 = (S.rot + S.spread) * D2R;
+        const p1x = S.x + Math.cos(a1) * S.len, p1y = S.y + Math.sin(a1) * S.len;
+        const p2x = S.x + Math.cos(a2) * S.len, p2y = S.y + Math.sin(a2) * S.len;
+        // Lùi đỉnh mask về sau kính đèn một chút để chỗ phát sáng không bị mép mềm làm tối
+        const bx = S.x - Math.cos(S.rot * D2R) * 40, by = S.y - Math.sin(S.rot * D2R) * 40;
+        const m = `${halfPlane(bx, by, -Math.sin(a1), Math.cos(a1), S.feather)}, ${halfPlane(bx, by, Math.sin(a2), -Math.cos(a2), S.feather)}`;
+        lit.style.webkitMaskImage = m;
+        lit.style.maskImage = m;
+        lit.style.opacity = Math.min(1, S.spread / 3);
+        const pts = `${S.x},${S.y} ${p1x},${p1y} ${p2x},${p2y}`;
+        glow.setAttribute("points", pts);
+        glow2.setAttribute("points", pts);
+        hot.style.background = `radial-gradient(circle at ${S.x}px ${S.y}px, rgba(255,255,255,${S.hot}) 0px, rgba(255,255,255,${0.8 * S.hot}) 140px, rgba(255,255,255,${0.35 * S.hot}) 360px, rgba(255,255,255,0) 700px)`;
+        lamp.style.transform = `translate(${S.x}px, ${S.y}px) rotate(${S.rot}deg)`;
+      }
+
+      const tl = gsap.timeline({ paused: true, onUpdate: render });
+
+      // ---- 0.00–1.05 · Đèn tự lắp ráp (khung 0 đã có thân đèn phát sáng) ----
+      tl.fromTo("#sp-body", { rotation: -16, y: 0 }, { rotation: 12, y: -10, duration: 0.3, ease: "sine.inOut" }, 0);
+      tl.to("#sp-body", { rotation: -6, y: 0, duration: 0.25, ease: "sine.inOut" }, 0.3);
+      tl.to("#sp-body", { rotation: 0, duration: 0.3, ease: "back.out(3)" }, 0.55);
+      // Kính đèn rơi từ trên xuống (trục +x cục bộ đang hướng lên trên màn hình)
+      tl.fromTo("#sp-lens", { x: 820, rotation: 70 }, { x: 0, rotation: 0, duration: 0.55, ease: "bounce.out" }, 0.4);
+
+      // ---- 1.05 · Bật đèn: chùm hắt thẳng lên ----
+      tl.fromTo(S, { spread: 0, len: 0, hot: 0 }, { spread: 31, len: 2600, hot: 1, duration: 0.24, ease: "power3.out" }, 1.05);
+
+      // ---- Các cú quét giữa các trạm ----
+      const swing = (t, dur, to) => tl.to(S, { ...to, duration: dur, ease: "power3.inOut" }, t);
+      swing(2.35, 0.3, { x: 160, y: 1360, rot: -52 });          // → trạm 2 (chữ trên phải)
+      swing(3.85, 0.3, { x: 920, y: 250, rot: 122 });           // → trạm 3 (chữ dưới trái)
+      swing(5.35, 0.3, { x: 160, y: 250, rot: 57 });            // → trạm 4 (chữ dưới phải)
+      swing(6.85, 0.35, { x: 540, y: 1620, rot: -90, spread: 33 }); // → logo
+      // ---- Kết: chùm khép lại, đèn rơi khỏi khung ----
+      tl.to(S, { spread: 0, hot: 0, duration: 0.25, ease: "power2.in" }, 8.45);
+      tl.to(S, { y: 2150, duration: 0.35, ease: "power3.in" }, 8.62);
+
+      // ---- Chữ: hiện khi chùm tới, tắt trước cú quét kế tiếp ----
+      const showText = (id, tIn, tOut) => {
+        tl.fromTo(`${id} .sp-in`, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.28, ease: "power3.out" }, tIn);
+        tl.to(`${id} .sp-in`, { opacity: 0, duration: 0.18, ease: "power2.in" }, tOut);
+      };
+      showText("#sp-t1", 1.1, 2.24);
+      showText("#sp-t2", 2.56, 3.74);
+      showText("#sp-t3", 4.06, 5.24);
+      showText("#sp-t4", 5.56, 6.74);
+      tl.fromTo("#sp-logo .sp-in", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, 7.08);
+
+      // Nền cầu trôi nhẹ để chùm sáng có chiều sâu
+      [["#sp-ball1", 40, 30], ["#sp-ball2", -50, 40], ["#sp-ball3", 30, -40], ["#sp-ball4", -40, -30], ["#sp-ball5", 50, -20]].forEach(([id, dx, dy]) => {
+        tl.fromTo(id, { x: 0, y: 0 }, { x: dx, y: dy, duration: 9.2, ease: "none" }, 0);
+      });
+
+      tl.to({}, { duration: 0.01 }, 9.29);
+      render();
+      window.__timelines["spotlight"] = tl;
+    })();
+  </script>
+</template>
+</html>

@@ -1,0 +1,72 @@
+<html
+  data-composition-variables='[
+    {"id":"handle","type":"string","label":"Handle","default":"@ten-studio"}
+  ]'
+>
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    #ec-panel {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      background: #fff;
+    }
+    #ec-handle {
+      position: absolute;
+      left: 0;
+      top: 860px;
+      width: 1080px;
+      text-align: center;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 68px;
+      letter-spacing: -0.01em;
+      color: #111;
+      white-space: nowrap;
+    }
+    #ec-handle .ec-ch {
+      display: inline-block;
+      white-space: pre;
+    }
+  </style>
+
+  <div id="root" data-composition-id="endcard" data-width="1080" data-height="1920">
+    <div id="ec-panel"></div>
+    <div id="ec-handle" data-layout-allow-overlap data-var-text="handle">@ten-studio</div>
+  </div>
+
+  <script>
+    (function () {
+      const root = document.querySelector('[data-composition-id="endcard"]');
+      const handle = root.querySelector("#ec-handle");
+      // Tách handle thành từng ký tự để chạy vào/ra lần lượt
+      const text = handle.textContent.trim();
+      handle.textContent = "";
+      for (const ch of text) {
+        const s = document.createElement("span");
+        s.className = "ec-ch";
+        s.textContent = ch;
+        handle.appendChild(s);
+      }
+      const chars = root.querySelectorAll(".ec-ch");
+
+      const tl = gsap.timeline({ paused: true });
+      // 0.00–0.40 · Tấm trắng đẩy từ dưới lên, nhoè theo hướng chạy
+      tl.fromTo("#ec-panel", { y: 1920, scaleY: 1.25, transformOrigin: "50% 0%" }, { y: 0, scaleY: 1, duration: 0.4, ease: "power4.inOut" }, 0.05);
+      // 0.30–0.65 · Handle trượt vào từ phải, mờ → nét
+      tl.fromTo(chars, { x: 220, opacity: 0, filter: "blur(14px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.32, ease: "power3.out", stagger: 0.018 }, 0.32);
+      // 2.05–2.55 · Từng ký tự thoát sang phải
+      tl.to(chars, { x: 260, opacity: 0, filter: "blur(14px)", duration: 0.24, ease: "power3.in", stagger: { each: 0.03, from: "start" } }, 2.05);
+      tl.to({}, { duration: 0.01 }, 2.69);
+      window.__timelines["endcard"] = tl;
+    })();
+  </script>
+</template>
+</html>

@@ -1,0 +1,28 @@
+# Môi trường, bộ nhớ đệm
+.DS_Store
+.venv/
+__pycache__/
+node_modules/
+*.pyc
+
+# HyperFrames: ảnh chụp, báo cáo check, bản render tạm
+.hyperframes/
+renders/
+
+# Media có giấy phép không cho phân phối lại (xem credits.tsv / README từng template)
+travel_cinematic/stock/*.mp4
+travel_cinematic/music/
+
+# Clip giữ chỗ: tạo lại bằng make_placeholders.py
+*/placeholders/
+
+# Nghiên cứu: video, khung hình tải từ mạng xã hội chỉ để phân tích, không phân phối lại
+research/*/
+!research/scripts/
+!research/fb_14t4VadzQ7w/
+research/fb_14t4VadzQ7w/*
+!research/fb_14t4VadzQ7w/BAO_CAO.md
+
+# Bộ nhớ đệm của Studio
+.waveform-cache/
+.thumbnails/

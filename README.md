@@ -66,6 +66,7 @@ welcome_travel/       CapCut: build_template.py (dùng chung write_draft, beats 
 research/             Ghi chép phân tích reel mẫu + script đo khung hình (measure.py, tile.py, preview_draft.py)
 gallery/              Ảnh xem trước + script dựng ảnh
 tools/capcut-cli/     package.json ghim capcut-cli (chỉ dùng để lint)
+playbook/             Sổ tay dựng video (kịch bản, TTS, phụ đề, SFX, loudness, HyperFrames, QA, lệnh ffmpeg)
 BAO_CAO_CAPCUT_TEMPLATE.md   Ghi chép định dạng draft CapCut 9.5 macOS và cách sinh template
 ```
 

@@ -14,9 +14,9 @@ Có hai loại:
 
 <table>
 <tr>
-<td align="center" valign="top" width="22%"><a href="spotlight_916/"><img src="gallery/spotlight_916.gif" width="180" alt="Spotlight Reveal"></a><br>🔴 <b>Spotlight Reveal</b><br><sub>HyperFrames · 9:16 · 11,5 s</sub></td>
-<td align="center" valign="top" width="39%"><a href="travel_cinematic/"><img src="gallery/travel_cinematic.gif" width="320" alt="Travel Cinematic"></a><br>🟢 <b>Travel Cinematic</b><br><sub>CapCut · 16:9 · 22,5 s · 14 clip</sub></td>
-<td align="center" valign="top" width="39%"><a href="welcome_travel/"><img src="gallery/welcome_travel.gif" width="320" alt="Welcome Travel Moment"></a><br>🟡 <b>Welcome Travel Moment</b><br><sub>CapCut · 16:9 · 25,5 s · 52 clip</sub></td>
+<td align="center" valign="top" width="22%"><a href="spotlight_916/"><img src="gallery/spotlight_916.gif" width="160" alt="Spotlight Reveal"></a><br>🔴 <b>Spotlight Reveal</b><br><sub>HyperFrames · 9:16 · 11,5 s</sub></td>
+<td align="center" valign="top" width="39%"><a href="travel_cinematic/"><img src="gallery/travel_cinematic.gif" width="300" alt="Travel Cinematic"></a><br>🟢 <b>Travel Cinematic</b><br><sub>CapCut · 16:9 · 22,5 s · 14 clip</sub></td>
+<td align="center" valign="top" width="39%"><a href="welcome_travel/"><img src="gallery/welcome_travel.gif" width="300" alt="Welcome Travel Moment"></a><br>🟡 <b>Welcome Travel Moment</b><br><sub>CapCut · 16:9 · 25,5 s · 52 clip</sub></td>
 </tr>
 </table>
 
